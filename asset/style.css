@@ -1,12 +1,16 @@
 :root {
-    --primary-color: rgb(102, 7, 7);
+    --primary-bg: rgb(102, 7, 7);
     --primary-text: rgb(167, 167, 167);
+    --secondary-bg: rgb(34, 9, 9);
+    --secondary-text: rgb(149, 94, 94);
 }
 
 * {
     margin: 0;
     padding: 0;
     text-decoration: none;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
 }
 
 .flex {
@@ -15,14 +19,37 @@
     justify-content: center;
 }
 
+.space-between {
+    justify-content: space-between;
+}
+
 .btn {
-    background-color: var(--primary-color);
+    background-color: var(--primary-bg);
     color: var(--primary-text);
     border: 2px solid black;
-    border-radius: 6px;
-    transition: all 400ms;
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 300ms;
 }
 
 .btn:hover {
-    background-color: brown;
+    background-color: rgb(153, 3, 3);
+}
+
+.btn:active {
+    background-color: rgb(34, 0, 0);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.navLink {
+    margin: 0 14px;
+}
+
+#header {
+    padding: 2vw 4vw;
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
 }

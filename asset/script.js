@@ -1,5 +1,4 @@
 const element = {
-    loginBtn: document.getElementById("loginBtn")
+    loginBtn: document.getElementById("loginBtn"),
+    header: document.getElementById("header"),
 }
-
-element.loginBtn.style.padding = "4px 8px"
