@@ -44,10 +44,19 @@
 
 .navLink {
     margin: 0 14px;
+    color: var(--secondary-text);
+    transition: all 100ms;
+}
+
+.navLink:hover {
+    background-color: rgb(161, 126, 126);
+}
+
+.navLink:active {
+    background-color: rgb(119, 79, 79);
 }
 
 #header {
     padding: 1vw 2vw;
     background-color: var(--secondary-bg);
-    color: var(--secondary-text);
 }
