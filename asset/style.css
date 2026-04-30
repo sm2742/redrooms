@@ -60,3 +60,9 @@
     padding: 1vw 2vw;
     background-color: var(--secondary-bg);
 }
+
+@media (max-width: 700px) {
+    .navLink {
+        display: none;
+    }
+}
