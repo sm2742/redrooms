@@ -44,6 +44,7 @@
 
 .navLink {
     margin: 0 14px;
+    background-color: var(--secondary-bg);
     color: var(--secondary-text);
     transition: all 100ms;
 }
