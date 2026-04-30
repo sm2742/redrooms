@@ -5,6 +5,7 @@ const element = {
 }
 
 const init = () => {
+    element.headerLogo.style.borderRadius = "20px"
     element.headerLogo.onclick = () => window.location.href = "/"
 }
 init()
