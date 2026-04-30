@@ -21,6 +21,10 @@
     justify-content: space-between;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .btn {
     background-color: var(--primary-bg);
     color: var(--primary-text);
@@ -38,23 +42,18 @@
     background-color: rgb(34, 0, 0);
 }
 
-.pointer {
-    cursor: pointer;
-}
-
 .navLink {
     margin: 0 14px;
-    background-color: var(--secondary-bg);
     color: var(--secondary-text);
     transition: all 100ms;
 }
 
 .navLink:hover {
-    background-color: rgb(161, 126, 126);
+    color: rgb(161, 126, 126);
 }
 
 .navLink:active {
-    background-color: rgb(119, 79, 79);
+    color: rgb(119, 79, 79);
 }
 
 #header {
