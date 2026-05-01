@@ -105,6 +105,6 @@
 
     #footer {
         grid-template-columns: auto;
-        grid-template-rows: repeat(3, 1fr);
+        gap: 12px;
     }
 }
