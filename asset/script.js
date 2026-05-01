@@ -7,7 +7,7 @@ const elements = {
 
 const notify = (msg, timeoutms) => {
     el("notificationSpan").innerText = msg
-    timeout && setTimeout(() => el("notificationSpan").innerText = "", timeoutms);
+    timeoutms && setTimeout(() => el("notificationSpan").innerText = "", timeoutms);
 }
 
 const init = () => {
