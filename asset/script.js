@@ -7,8 +7,8 @@ const elements = {
 
 const notify = (msg, timeoutms) => {
     el("notificationSpan").innerText = msg
-    el("notificationSpan").display = "inline"
-    timeoutms && setTimeout(() => el("notificationSpan").display = "none", timeoutms);
+    el("notificationSpan").style.display = "inline"
+    timeoutms && setTimeout(() => el("notificationSpan").style.display = "none", timeoutms);
 }
 
 const init = () => {
