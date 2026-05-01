@@ -9,11 +9,25 @@
     margin: 0;
     padding: 0;
     text-decoration: none;
-    font-family: "Stack Sans Notch";
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: italic;
-    font-size: large;
+}
+
+.stack-sans-text-regular {
+  font-family: "Stack Sans Text", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tangerine-regular {
+  font-family: "Tangerine", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tangerine-bold {
+  font-family: "Tangerine", cursive;
+  font-weight: 700;
+  font-style: normal;
 }
 
 .prim-bg {
