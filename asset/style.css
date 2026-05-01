@@ -12,7 +12,8 @@
     font-family: "Stack Sans Notch";
     font-optical-sizing: auto;
     font-weight: 300;
-    font-style: normal;
+    font-style: italic;
+    font-size: large;
 }
 
 .prim-bg {
