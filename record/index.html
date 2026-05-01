@@ -24,16 +24,16 @@
         </div>
     </div>
     <!-- body -->
-    <div class="flex flex-column">
-        <span class="sec-bg" id="warningSpan" style="margin: 2vw 2px;"></span>
-        <div class="flex" id="inputDiv">
+    <div>
+        <span class="sec-bg" id="notificationSpan" style="margin: 2vw 2px; border-radius: 12px;"></span>
+        <div class="flex">
             <label for="audioCheck">Audio: </label>
-            <input type="checkbox" id="audioCheck" class="ml-14">
+            <input type="checkbox" class="ml-14" id="audioCheck">
             <label for="videoCheck" class="ml-14">Video: </label>
-            <input type="checkbox" id="videoCheck" class="ml-14">
+            <input type="checkbox" class="ml-14" id="videoCheck">
         </div>
-        <button class="btn sec-bg" id="recordBtn" disabled>Start Recording</button>
-        <div class="flex" id="playerDiv"></div>
+        <button class="btn sec-bg mu-2" id="recordBtn" disabled>Start Recording</button>
+        <div class="flex mu-2" id="playerDiv"></div>
     </div>
     <!-- footer -->
     <div class="sec-bg" style="padding: 1vw 2vw;" id="footer">
