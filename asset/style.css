@@ -11,8 +11,14 @@
     text-decoration: none;
 }
 
+.prim-bg {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+}
+
 .sec-bg {
     background-color: var(--secondary-bg);
+    color: var(--secondary-text);
 }
 
 .flex {
@@ -38,8 +44,6 @@
 }
 
 .btn {
-    background-color: var(--primary-bg);
-    color: var(--primary-text);
     border: 2px solid var(--secondary-bg);
     border-radius: 8px;
     padding: 8px 12px;
@@ -55,7 +59,6 @@
 }
 
 .nav-link {
-    color: var(--secondary-text);
     transition: all 100ms;
 }
 
