@@ -4,7 +4,9 @@ if (navigator.mediaDevices) {
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording()
-
+} else {
+    notify("getUserMedia not supported.")
+}
     const startRecording = () => {
         if (!el("audioCheck").checked && !el("videoCheck").checked) {
             return  notify("Please select audio or video or both", 2000)
@@ -66,6 +68,3 @@ if (navigator.mediaDevices) {
                 };
             }).catch(err => notify(`The following error occurred: ${err}`, 3000));
     }
-} else {
-    notify("getUserMedia not supported.")
-}
