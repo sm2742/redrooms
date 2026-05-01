@@ -11,6 +11,10 @@
     text-decoration: none;
 }
 
+.sec-bg {
+    background-color: var(--secondary-bg);
+}
+
 .flex {
     display: flex;
     align-items: center;
@@ -27,6 +31,10 @@
 
 .pointer {
     cursor: pointer;
+}
+
+.logo {
+    border-radius: 20px;
 }
 
 .btn {
@@ -47,7 +55,6 @@
 }
 
 .nav-link {
-    margin: 0 0 0 14px;
     color: var(--secondary-text);
     transition: all 100ms;
 }
@@ -60,13 +67,12 @@
     color: rgb(119, 79, 79);
 }
 
-#header, #footer {
-    padding: 1vw 2vw;
-    background-color: var(--secondary-bg);
+.ml-14 {
+    margin: 0 0 0 14px;
 }
 
 @media (max-width: 700px) {
-    .nav-link {
+    .hide-mobile {
         display: none;
     }
 }

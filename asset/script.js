@@ -1,11 +1,9 @@
-const element = {
+const elements = {
     loginBtn: document.getElementById("loginBtn"),
-    header: document.getElementById("header"),
-    headerLogo: document.getElementById("headerLogo"),
+    logo: document.getElementsByClassName("logo"),
 }
 
 const init = () => {
-    element.headerLogo.style.borderRadius = "20px"
-    element.headerLogo.onclick = () => window.location.href = "/"
+    elements.logo.forEach(x => x.onclick = () => window.location.href = "/");
 }
 init()
