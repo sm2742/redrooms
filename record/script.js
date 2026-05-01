@@ -1,15 +1,8 @@
-const el = x => document.getElementById(x)
-
-el("notificationSpan").classList.add("sec-bg")
-el("notificationSpan").innerText = "Checking for media devices..."
+notify("Checking for media devices...")
 if (navigator.mediaDevices) {
-    el("notificationSpan").innerText = "getUserMedia supported."
+    notify("getUserMedia supported.", 3000)
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
-    setTimeout(()=>{
-        el("notificationSpan").classList.remove("sec-bg")
-        el("notificationSpan").innerText = ""
-    }, 3000)
 
     const constraints = { audio: true };
     let chunks = [];
@@ -77,5 +70,5 @@ if (navigator.mediaDevices) {
     //         console.error(`The following error occurred: ${err}`);
     //     });
 } else {
-    el("notificationSpan").innerText = "getUserMedia not supported."
+    notify("getUserMedia not supported.")
 }

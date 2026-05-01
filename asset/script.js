@@ -1,6 +1,13 @@
+const el = x => document.getElementById(x)
+
 const elements = {
-    loginBtn: document.getElementById("loginBtn") || null,
+    loginBtn: el("loginBtn") || null,
     logo: document.getElementsByClassName("logo"),
+}
+
+const notify = (msg, timeoutms) => {
+    el("notificationSpan").innerText = msg
+    timeout && setTimeout(() => el("notificationSpan").innerText = "", timeoutms);
 }
 
 const init = () => {

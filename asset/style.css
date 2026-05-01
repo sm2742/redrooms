@@ -12,17 +12,17 @@
 }
 
 .stack-sans-text-regular {
-  font-family: "Stack Sans Text", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Stack Sans Text", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .caveat-brush-regular {
-  font-family: "Caveat Brush", cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: x-large;
+    font-family: "Caveat Brush", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: x-large;
 }
 
 .prim-bg {
@@ -98,6 +98,14 @@
 
 .mu-2 {
     margin: 2px 0 0 0;
+}
+
+#notificationSpan {
+    padding: 4px 6px;
+    border-radius: 8px;
+    position: absolute;
+    bottom: 10vh;
+    right: 2vw;
 }
 
 #footer {
