@@ -4,6 +4,6 @@ const elements = {
 }
 
 const init = () => {
-    elements.logo.forEach(x => x.onclick = () => window.location.href = "/");
+    for (const x of elements.logo) x.onclick = () => window.location.href = "/"
 }
 init()
