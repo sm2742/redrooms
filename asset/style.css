@@ -59,6 +59,7 @@
 }
 
 .nav-link {
+    color: var(--secondary-text);
     transition: all 100ms;
 }
 
