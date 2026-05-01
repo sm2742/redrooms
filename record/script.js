@@ -8,7 +8,7 @@ if (navigator.mediaDevices) {
     el("recordBtn").classList.add("pointer")
     setTimeout(()=>{
         el("warningSpan").innerText = ""
-    }, 800)
+    }, 3000)
 
     const constraints = { audio: true };
     let chunks = [];
