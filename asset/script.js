@@ -1,5 +1,5 @@
 const elements = {
-    loginBtn: document.getElementById("loginBtn"),
+    loginBtn: document.getElementById("loginBtn") || null,
     logo: document.getElementsByClassName("logo"),
 }
 
