@@ -68,7 +68,7 @@
 }
 
 .btn:active {
-    background-color: rgb(70, 33, 33);
+    background-color: rgb(117, 49, 49);
 }
 
 .btn:disabled {
@@ -103,6 +103,9 @@
 #notificationSpan {
     padding: 4px 6px;
     border-radius: 8px;
+    border: 2px solid var(--primary-bg);
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
     position: absolute;
     bottom: 10vh;
     right: 2vw;
