@@ -71,6 +71,10 @@
     background-color: rgb(34, 0, 0);
 }
 
+.btn:disabled {
+    background-color: rgb(128, 74, 74);
+}
+
 .nav-link {
     color: var(--secondary-text);
     transition: all 100ms;

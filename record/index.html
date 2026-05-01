@@ -25,7 +25,14 @@
     </div>
     <!-- body -->
     <div class="flex flex-column">
-        <div class="flex" id="inputDiv"></div>
+        <span class="sec-bg" id="warningSpan" style="margin: 2vw 2px;"></span>
+        <div class="flex" id="inputDiv">
+            <label for="audioCheck">Audio: </label>
+            <input type="checkbox" id="audioCheck">
+            <label for="videoCheck">Video: </label>
+            <input type="checkbox" id="videoCheck">
+            <button class="btn sec-bg" id="recordBtn" disabled>Start Recording</button>
+        </div>
         <div class="flex" id="playerDiv"></div>
     </div>
     <!-- footer -->
@@ -43,7 +50,7 @@
         </div>
     </div>
     <script src="/asset/script.js"></script>
-    <script src="./script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
