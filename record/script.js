@@ -1,12 +1,13 @@
 const el = x => document.getElementById(x)
 
+el("notificationSpan").style.display = "inline"
 el("notificationSpan").innerText = "Checking for media devices..."
 if (navigator.mediaDevices) {
     el("notificationSpan").innerText = "getUserMedia supported."
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     setTimeout(()=>{
-        el("notificationSpan").innerText = ""
+        el("notificationSpan").style.display = "none"
     }, 3000)
 
     const constraints = { audio: true };
