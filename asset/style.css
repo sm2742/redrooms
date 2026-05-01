@@ -43,7 +43,7 @@
 }
 
 .navLink {
-    margin: 0 14px;
+    margin: 0 0 0 14px;
     color: var(--secondary-text);
     transition: all 100ms;
 }
