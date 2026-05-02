@@ -19,7 +19,8 @@ const recordStream = stream => {
     el("recordBtn").onclick = stopRecording
 
     mediaRecorder.onstop = (e) => {
-        const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+        stream.getTracks().forEach(track => track.stop());
+        const blob = new Blob(chunks);
         notify(`Media Size: ${blob.size} Bytes`, 3000)
     };
 
@@ -28,7 +29,6 @@ const recordStream = stream => {
 
 const stopRecording = () => {
     mediaRecorder.stop()
-    el("player").srcObject = null
     el("recordBtn").innerText = "Start Recording"
     el("recordBtn").onclick = startRecording
 }
