@@ -1,16 +1,16 @@
 const startRecording = () => {
-    if (!el("audioCheck").checked && !el("videoCheck").checked) {
-        return notify("Please select audio or video or both", 2000)
-    }
+    if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
     let chunks = [];
+    let getMedia = navigator.mediaDevices.getUserMedia
+    if (el("screenCheck").checked) getMedia = navigator.mediaDevices.getDisplayMedia
 
-    navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then((stream) => {
+    getMedia(constraints).then((stream) => {
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             el("player").srcObject = stream
+            el("recordBtn").innerText = "Stop Recording"
+            el("recordBtn").onclick = stopRecording(mediaRecorder)
 
             // stop.onclick = () => {
             //     mediaRecorder.stop();
@@ -54,15 +54,19 @@ const startRecording = () => {
             //     };
             // };
 
-            mediaRecorder.ondataavailable = (e) => {
-                chunks.push(e.data);
-            };
+            mediaRecorder.ondataavailable = e => chunks.push(e.data)
         }).catch(err => notify(`The following error occurred: ${err}`, 3000));
+}
+
+const stopRecording = mediaRecorder => {
+    mediaRecorder.stop()
+    el("recordBtn").innerText = "Start Recording"
+    el("recordBtn").onclick = startRecording
 }
 
 notify("Checking for media devices...")
 if (navigator.mediaDevices) {
-    notify("getUserMedia supported.", 2000)
+    notify("Media recording supported.", 2000)
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording
