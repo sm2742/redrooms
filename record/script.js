@@ -1,4 +1,4 @@
-let mediaRecorder, chunks;
+let mediaRecorder, devices, chunks = [];
 // todo: pause/resume/switchcam/snapshot/savelocal/savedb
 const startRecording = () => {
     if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
@@ -11,7 +11,6 @@ const startRecording = () => {
 }
 
 const recordStream = stream => {
-    chunks = []
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start();
     el("player").srcObject = stream
@@ -21,6 +20,7 @@ const recordStream = stream => {
     mediaRecorder.onstop = (e) => {
         stream.getTracks().forEach(track => track.stop());
         const blob = new Blob(chunks);
+        chunks = []
         notify(`Media Size: ${blob.size} Bytes`, 5000)
     };
 
@@ -39,6 +39,8 @@ if (navigator.mediaDevices) {
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording
+    navigator.mediaDevices.enumerateDevices().then(deviceList => { devices = deviceList })
+    console.log(devices);
 } else {
     notify("Media recording not supported.")
 }
