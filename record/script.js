@@ -1,5 +1,5 @@
 let mediaRecorder, chunks;
-// todo: pause/resume/snapshot/savelocal/savedb
+// todo: pause/resume/switchcam/snapshot/savelocal/savedb
 const startRecording = () => {
     if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
