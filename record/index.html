@@ -26,13 +26,12 @@
     <span id="notificationSpan" style="display: none;"></span>
     <!-- body -->
     <div class="prim-bg vh-90" style="padding: 4vw;">
-        <div class="flex flex-column" id="deviceList">
-            <label for="screenCheck" class="pointer">Screen: </label>
-            <input type="checkbox" l class="pointer mu-2" id="screenCheck">
-        </div>
         <button class="btn sec-bg mu-14" id="recordBtn" disabled>Start Recording</button>
         <div class="flex mu-14">
             <video id="player" height="200px" autoplay controls muted></video>
+        </div>
+        <div id="deviceList">
+            Available Devices:
         </div>
     </div>
     <!-- footer -->
