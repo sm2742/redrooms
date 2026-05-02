@@ -3,7 +3,7 @@ let mediaRecorder, chunks = [];
 const listDevices = list => {
     list.forEach(item => {
         let x = document.createElement("div")
-        x.classList.add("flex mu-2 pointer")
+        x.classList.add("flex", "mu-2", "pointer")
         x.innerText = `${item.kind} || ${item.label}`
         x.style.borderRadius = "8px"
         x.style.padding = "8px 12px"
