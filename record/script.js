@@ -1,3 +1,5 @@
+let mediaRecorder, chunks, mediaURL;
+// todo: pause/resume/snapshot/savelocal/savedb
 const startRecording = () => {
     if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
@@ -9,59 +11,22 @@ const startRecording = () => {
 }
 
 const recordStream = stream => {
-            let chunks = [];
-            const mediaRecorder = new MediaRecorder(stream);
+            chunks = []
+            mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             el("player").srcObject = stream
             el("recordBtn").innerText = "Stop Recording"
-            el("recordBtn").onclick = stopRecording(mediaRecorder)
+            el("recordBtn").onclick = stopRecording
 
-            // stop.onclick = () => {
-            //     mediaRecorder.stop();
-            //     console.log(mediaRecorder.state);
-            //     console.log("recorder stopped");
-            //     record.style.background = "";
-            //     record.style.color = "";
-            // };
-
-            // mediaRecorder.onstop = (e) => {
-            //     console.log("data available after MediaRecorder.stop() called.");
-
-            //     const clipName = prompt("Enter a name for your sound clip");
-
-            //     const clipContainer = document.createElement("article");
-            //     const clipLabel = document.createElement("p");
-            //     const audio = document.createElement("audio");
-            //     const deleteButton = document.createElement("button");
-            //     const mainContainer = document.querySelector("body");
-
-            //     clipContainer.classList.add("clip");
-            //     audio.setAttribute("controls", "");
-            //     deleteButton.textContent = "Delete";
-            //     clipLabel.textContent = clipName;
-
-            //     clipContainer.appendChild(audio);
-            //     clipContainer.appendChild(clipLabel);
-            //     clipContainer.appendChild(deleteButton);
-            //     mainContainer.appendChild(clipContainer);
-
-            //     audio.controls = true;
-            //     const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-            //     chunks = [];
-            //     const audioURL = URL.createObjectURL(blob);
-            //     audio.src = audioURL;
-            //     console.log("recorder stopped");
-
-            //     deleteButton.onclick = (e) => {
-            //         const evtTgt = e.target;
-            //         evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-            //     };
-            // };
+            mediaRecorder.onstop = (e) => {
+                const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+                mediaURL = URL.createObjectURL(blob);
+            };
 
             mediaRecorder.ondataavailable = e => chunks.push(e.data)
         }
 
-const stopRecording = mediaRecorder => {
+const stopRecording = () => {
     mediaRecorder.stop()
     el("recordBtn").innerText = "Start Recording"
     el("recordBtn").onclick = startRecording
@@ -74,5 +39,5 @@ if (navigator.mediaDevices) {
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording
 } else {
-    notify("getUserMedia not supported.")
+    notify("Media recording not supported.")
 }
