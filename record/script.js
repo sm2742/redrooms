@@ -21,7 +21,7 @@ const recordStream = stream => {
     mediaRecorder.onstop = (e) => {
         stream.getTracks().forEach(track => track.stop());
         const blob = new Blob(chunks);
-        notify(`Media Size: ${blob.size} Bytes`, 3000)
+        notify(`Media Size: ${blob.size} Bytes`, 5000)
     };
 
     mediaRecorder.ondataavailable = e => chunks.push(e.data)
