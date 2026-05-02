@@ -55,7 +55,10 @@ const startRecording = () => {
             // };
 
             mediaRecorder.ondataavailable = e => chunks.push(e.data)
-        }).catch(err => notify(`The following error occurred: ${err}`, 3000));
+        }).catch(err => {
+            notify(`The following error occurred: ${err}`, 3000)
+            console.log(err);
+        });
 }
 
 const stopRecording = mediaRecorder => {
