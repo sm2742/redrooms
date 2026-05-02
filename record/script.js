@@ -1,5 +1,16 @@
-let mediaRecorder, devices, chunks = [];
+let mediaRecorder, chunks = [];
 // todo: pause/resume/switchcam/snapshot/savelocal/savedb
+const listDevices = list => {
+    list.forEach(item => {
+        let x = document.createElement("div")
+        x.classList.add("flex mu-2 pointer")
+        x.innerText = `${item.kind} || ${item.label}`
+        x.style.borderRadius = "8px"
+        x.style.padding = "8px 12px"
+        el("deviceList").appendChild(x)
+    })
+}
+
 const startRecording = () => {
     if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
@@ -39,10 +50,7 @@ if (navigator.mediaDevices) {
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording
-    navigator.mediaDevices.enumerateDevices().then(deviceList => {
-        devices = deviceList
-        console.log(devices);
-    })
+    navigator.mediaDevices.enumerateDevices().then(listDevices)
 } else {
     notify("Media recording not supported.")
 }
