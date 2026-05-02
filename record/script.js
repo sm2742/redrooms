@@ -1,9 +1,7 @@
 const startRecording = () => {
-    console.log("1");
     if (!el("audioCheck").checked && !el("videoCheck").checked) {
         return notify("Please select audio or video or both", 2000)
     }
-    console.log("2");
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
     let chunks = [];
 
@@ -67,7 +65,7 @@ if (navigator.mediaDevices) {
     notify("getUserMedia supported.", 2000)
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
-    el("recordBtn").onClick = startRecording
+    el("recordBtn").onclick = startRecording
 } else {
     notify("getUserMedia not supported.")
 }

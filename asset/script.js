@@ -2,13 +2,14 @@ const el = x => document.getElementById(x)
 
 const elements = {
     loginBtn: el("loginBtn") || null,
+    notificationSpan: el("notificationSpan"),
     logo: document.getElementsByClassName("logo"),
 }
 
 const notify = (msg, timeoutms) => {
-    el("notificationSpan").innerText = msg
-    el("notificationSpan").style.display = "inline"
-    timeoutms && setTimeout(() => el("notificationSpan").style.display = "none", timeoutms);
+    elements.notificationSpan.innerText = msg
+    elements.notificationSpan.style.display = "inline"
+    timeoutms && setTimeout(() => elements.notificationSpan.style.display = "none", timeoutms);
 }
 
 const init = () => {
