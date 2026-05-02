@@ -3,7 +3,7 @@ let mediaRecorder, chunks = [];
 const listDevices = list => {
     list.forEach(item => {
         let x = document.createElement("div")
-        x.classList.add("flex", "mu-2", "pointer")
+        x.classList.add("mu-2")
         x.innerText = `${item.kind} || ${item.label}`
         el("deviceList").appendChild(x)
     })
