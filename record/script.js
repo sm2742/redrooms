@@ -39,8 +39,10 @@ if (navigator.mediaDevices) {
     el("recordBtn").disabled = false
     el("recordBtn").classList.add("pointer")
     el("recordBtn").onclick = startRecording
-    navigator.mediaDevices.enumerateDevices().then(deviceList => { devices = deviceList })
-    console.log(devices);
+    navigator.mediaDevices.enumerateDevices().then(deviceList => {
+        devices = deviceList
+        console.log(devices);
+    })
 } else {
     notify("Media recording not supported.")
 }
