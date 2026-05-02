@@ -1,7 +1,9 @@
 const startRecording = () => {
+    console.log("1");
     if (!el("audioCheck").checked && !el("videoCheck").checked) {
         return notify("Please select audio or video or both", 2000)
     }
+    console.log("2");
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
     let chunks = [];
 
@@ -59,6 +61,7 @@ const startRecording = () => {
             };
         }).catch(err => notify(`The following error occurred: ${err}`, 3000));
 }
+
 notify("Checking for media devices...")
 if (navigator.mediaDevices) {
     notify("getUserMedia supported.", 2000)
