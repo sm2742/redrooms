@@ -51,7 +51,7 @@ const snapshot = () => {
     const canvas = document.createElement("canvas")
     canvas.height = DOMElements.player.videoHeight
     canvas.width = DOMElements.player.videoWidth
-    canvas.style.maxHeight = "20px"
+    canvas.style.maxHeight = "20vh"
     canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
 
     const dataURL = canvas.toDataURL('image/png');
