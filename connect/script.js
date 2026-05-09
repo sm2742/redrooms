@@ -1,10 +1,12 @@
 const DOMElements = {
     myID: el("myID"),
 }
-const peer = new Peer();
+
+const id = window.prompt("Enter your peer ID", "Leave empty to get a random ID")
+const peer = new Peer(id);
 
 peer.on("open", id => {
-    DOMElements.myID.innerText = " " + id
+    DOMElements.myID.innerText = id
     DOMElements.myID.classList.add("pointer")
     DOMElements.myID.addEventListener("click", () => navigator.clipboard.writeText(id))
 });
