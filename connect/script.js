@@ -2,7 +2,7 @@ const DOMElements = {
     myID: el("myID"),
 }
 
-const id = window.prompt("Enter your peer ID", "Leave empty to get a random ID")
+const id = window.prompt("Enter your peer ID\nLeave empty to get a random ID")
 const peer = new Peer(id);
 
 peer.on("open", id => {
