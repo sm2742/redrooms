@@ -52,7 +52,16 @@ const snapshot = () => {
     canvas.height = DOMElements.player.videoHeight
     canvas.width = DOMElements.player.videoWidth
     canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
-    notify("Snapshot Captured", canvas)
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = `Snapshot-${Date.UTC()}.png`;
+    link.href = dataURL;
+    const btn = document.createElement("button")
+    btn.classList.add("btn", "pointer")
+    btn.onclick = () => link.click();
+    const div = document.createElement("div")
+    div.append(canvas, btn)
+    notify("Snapshot Captured", div)
 }
 
 notify("Checking for media devices...")
