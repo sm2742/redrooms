@@ -21,7 +21,7 @@ const startRecording = () => {
     if (!DOMElements.audioCheck.checked && !DOMElements.videoCheck.checked) return notify("No media selected", null, 2000)
 
     DOMElements.screenCheck.checked ? navigator.mediaDevices.getDisplayMedia({ audio: DOMElements.audioCheck.checked, video: DOMElements.videoCheck.checked }).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000))
-        : navigator.mediaDevices.getUserMedia({ audio: DOMElements.audioCheck.checked, video: { facingMode: DOMElements.faceCamCheck.checked } }).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000));
+        : navigator.mediaDevices.getUserMedia({ audio: DOMElements.audioCheck.checked, video: { facingMode: DOMElements.faceCamCheck.checked ? "user" : "environment" } }).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000));
 }
 
 const recordStream = stream => {
