@@ -48,10 +48,10 @@ const recordStream = stream => {
 }
 
 const snapshot = () => {
-    let canvas = document.createElement("canvas")
-    canvas.height = DOMElements.player.height
-    canvas.width = DOMElements.player.width
-    canvas.getContext('2d').drawImage(DOMElements.player, 0, 0);
+    const canvas = document.createElement("canvas")
+    canvas.height = DOMElements.player.videoHeight
+    canvas.width = DOMElements.player.videoWidth
+    canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
     notify(canvas)
     DOMElements.deviceList.innerHTML = canvas
 }
