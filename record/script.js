@@ -81,6 +81,7 @@ if (navigator.mediaDevices) {
     DOMElements.recordBtn.onclick = startRecording
     DOMElements.snapshot.onclick = snapshot
     navigator.mediaDevices.enumerateDevices().then(listDevices)
+    document.addEventListener("click", e => console.log(e.ctrlKey, e.shiftKey, e.target.key, e))
     document.addEventListener("click", e => e.ctrlKey && !e.shiftKey && e.target.key == "s" && DOMElements.recordBtn.click())
     document.addEventListener("click", e => !e.ctrlKey && !e.shiftKey && e.target.key == "s" && DOMElements.snapshot.click())
 } else {
