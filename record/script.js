@@ -3,6 +3,7 @@ const DOMElements = {
     audioCheck: el("audioCheck"),
     videoCheck: el("videoCheck"),
     screenCheck: el("screenCheck"),
+    faceCamCheck: el("faceCamCheck"),
     deviceList: el("deviceList"),
     player: el("player"),
     recordBtn: el("recordBtn"),
@@ -18,10 +19,9 @@ const listDevices = list => list.forEach(item => {
 
 const startRecording = () => {
     if (!DOMElements.audioCheck.checked && !DOMElements.videoCheck.checked) return notify("No media selected", null, 2000)
-    // can add more parameters
-    const constraints = { audio: DOMElements.audioCheck.checked, video: DOMElements.videoCheck.checked };
-    DOMElements.screenCheck.checked ? navigator.mediaDevices.getDisplayMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000))
-        : navigator.mediaDevices.getUserMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000));
+
+    DOMElements.screenCheck.checked ? navigator.mediaDevices.getDisplayMedia({ audio: DOMElements.audioCheck.checked, video: DOMElements.videoCheck.checked }).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000))
+        : navigator.mediaDevices.getUserMedia({ audio: DOMElements.audioCheck.checked, video: { facingMode: DOMElements.faceCamCheck.checked } }).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, null, 3000));
 }
 
 const recordStream = stream => {
