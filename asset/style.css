@@ -35,6 +35,10 @@
     color: var(--secondary-text);
 }
 
+.d-none {
+    display: none;
+}
+
 .flex {
     display: flex;
     align-items: center;

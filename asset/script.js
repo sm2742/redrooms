@@ -9,8 +9,8 @@ const elements = {
 const notify = (msg, body, timeoutms) => {
     elements.notificationSpan.innerText = msg
     body && elements.notificationSpan.append(body)
-    elements.notificationSpan.style.display = "inline"
-    timeoutms && setTimeout(() => elements.notificationSpan.style.display = "none", timeoutms);
+    elements.notificationSpan.classList.remove("d-none")
+    timeoutms && setTimeout(() => elements.notificationSpan.classList.add("d-none"), timeoutms);
 }
 
 const init = () => {
