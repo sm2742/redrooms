@@ -65,7 +65,8 @@ const snapshot = () => {
     const div = document.createElement("div")
     div.classList.add("flex", "flex-column")
     div.append(canvas, btn)
-    notify("Snapshot Captured", div)
+    notify("Snapshot Captured", div, 5000)
+
 }
 
 notify("Checking for media devices...")
