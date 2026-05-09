@@ -35,10 +35,6 @@
     color: var(--secondary-text);
 }
 
-.d-none {
-    display: none;
-}
-
 .flex {
     display: flex;
     align-items: center;
@@ -107,6 +103,10 @@
 
 .vh-90 {
     min-height: 90vh;
+}
+
+.d-none {
+    display: none;
 }
 
 #notificationSpan {
