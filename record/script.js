@@ -53,6 +53,7 @@ const snapshot = () => {
     canvas.width = DOMElements.player.width
     canvas.getContext('2d').drawImage(DOMElements.player, 0, 0);
     notify(canvas)
+    DOMElements.deviceList.innerHTML = canvas
 }
 
 notify("Checking for media devices...")
