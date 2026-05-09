@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="/asset/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@400&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body class="stack-sans-text-regular">
@@ -38,9 +37,13 @@
             <label for="videoCheck" class="pointer ml-14">Video: </label>
             <input type="checkbox" class="pointer ml-14" id="videoCheck" checked>
         </div>
-        <button class="btn sec-bg mu-14" id="recordBtn" disabled>Start Recording</button>
         <div class="flex mu-14">
-            <video id="player" style="width: 500px; max-width: 85vw;" autoplay controls muted></video>
+            <button class="btn sec-bg" id="recordBtn" disabled>Start Recording</button>
+            <button class="btn sec-bg ml-14" id="snapshot" disabled>Take Snapshot</button>
+        </div>
+        <div class="flex mu-14">
+            <video id="player" style="width: 500px; max-width: 85vw;" class="ml-14" autoplay controls muted></video>
+            <canvas id="canvas" style="width: 500px; max-width: 85vw;" class="ml-14"></canvas>
         </div>
         <div class="mu-14" id="deviceList">
             Available Devices:

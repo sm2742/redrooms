@@ -9,6 +9,7 @@ const listDevices = list => list.forEach(item => {
 
 const startRecording = () => {
     if (!el("audioCheck").checked && !el("videoCheck").checked) return notify("No media selected", 2000)
+    // can add more parameters
     const constraints = { audio: el("audioCheck").checked, video: el("videoCheck").checked };
     el("screenCheck").checked ? navigator.mediaDevices.getDisplayMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, 3000))
         : navigator.mediaDevices.getUserMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, 3000));
@@ -19,17 +20,18 @@ const recordStream = stream => {
     mediaRecorder.start();
     el("player").srcObject = stream
     el("recordBtn").innerText = "Stop Recording"
-    el("recordBtn").onclick = () => {
-        mediaRecorder.stop()
-        el("recordBtn").innerText = "Start Recording"
-        el("recordBtn").onclick = startRecording
-    }
+    el("recordBtn").onclick = () => mediaRecorder.stop()
+    el("snapshot").disabled = false
+    el("snapshot").classList.add("pointer")
+    el("snapshot").onclick = () => el("canvas").getContext('2d').drawImage(el("player"), 0, 0);
 
-    mediaRecorder.onstop = (e) => {
+    mediaRecorder.onstop = e => {
         stream.getTracks().forEach(track => track.stop());
         const blob = new Blob(chunks);
         notify(`Media Size: ${blob.size} Bytes`, 5000)
         chunks = []
+        el("recordBtn").innerText = "Start Recording"
+        el("recordBtn").onclick = startRecording
     };
 
     mediaRecorder.ondataavailable = e => chunks.push(e.data)
