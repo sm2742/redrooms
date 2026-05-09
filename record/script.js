@@ -81,9 +81,9 @@ if (navigator.mediaDevices) {
     DOMElements.recordBtn.onclick = startRecording
     DOMElements.snapshot.onclick = snapshot
     navigator.mediaDevices.enumerateDevices().then(listDevices)
-    document.addEventListener("keypress", e => console.log(e.ctrlKey, e.shiftKey, e.target.key, e))
-    document.addEventListener("keypress", e => e.ctrlKey && !e.shiftKey && e.key == "s" && DOMElements.recordBtn.click())
-    document.addEventListener("keypress", e => !e.ctrlKey && !e.shiftKey && e.key == "s" && DOMElements.snapshot.click())
+    document.addEventListener("keyup", e => console.log(e.ctrlKey, e.shiftKey, e.target.key, e))
+    document.addEventListener("keyup", e => e.ctrlKey && !e.shiftKey && e.key == "s" && DOMElements.recordBtn.click())
+    document.addEventListener("keyup", e => !e.ctrlKey && !e.shiftKey && e.key == "s" && DOMElements.snapshot.click())
 } else {
     notify("Media recording not supported.")
 }
