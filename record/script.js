@@ -36,8 +36,9 @@ const recordStream = stream => {
     mediaRecorder.onstop = e => {
         stream.getTracks().forEach(track => track.stop());
         const blob = new Blob(chunks);
-        notify(`Media Size: ${blob.size} Bytes`, null, 5000)
         chunks = []
+        const btn = generateDlBtn(`Recording-${Date.now()}.mp4`, URL.createObjectURL(blob))
+        notify(`Media Size: ${blob.size} Bytes`, btn, 5000)
         DOMElements.recordBtn.innerText = "Start Recording"
         DOMElements.recordBtn.onclick = startRecording
         DOMElements.snapshot.disabled = true
@@ -47,23 +48,25 @@ const recordStream = stream => {
     mediaRecorder.ondataavailable = e => chunks.push(e.data)
 }
 
+const generateDlBtn = (filename, dataURL) => {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataURL;
+    const btn = document.createElement("button")
+    btn.innerText = "Save"
+    btn.classList.add("btn", "pointer", "prim-bg")
+    btn.onclick = () => link.click();
+    return btn
+}
+
 const snapshot = () => {
     const canvas = document.createElement("canvas")
     canvas.height = DOMElements.player.videoHeight
     canvas.width = DOMElements.player.videoWidth
     canvas.style.maxHeight = "20vh"
     canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
-
     const dataURL = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = `Snapshot-${Date.now()}.png`;
-    link.href = dataURL;
-
-    const btn = document.createElement("button")
-    btn.innerText = "Save"
-    btn.classList.add("btn", "pointer", "prim-bg")
-    btn.onclick = () => link.click();
-
+    const btn = generateDlBtn(`Snapshot-${Date.now()}.png`, dataURL)
     const div = document.createElement("div")
     div.classList.add("flex", "flex-column")
     div.append(canvas, btn)
