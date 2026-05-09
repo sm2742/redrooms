@@ -8,12 +8,12 @@ const elements = {
 
 const notify = (msg, body, timeoutms) => {
     elements.notificationSpan.innerText = msg
+    elements.notificationSpan.classList.remove("d-none")
+    timeoutms && setTimeout(() => elements.notificationSpan.classList.add("d-none"), timeoutms);
     if (body) {
         body.style.maxHeight = "35vh"
         elements.notificationSpan.append(body)
     }
-    elements.notificationSpan.classList.remove("d-none")
-    timeoutms && setTimeout(() => elements.notificationSpan.classList.add("d-none"), timeoutms);
 }
 
 const init = () => {
