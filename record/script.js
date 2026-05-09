@@ -49,12 +49,14 @@ const recordStream = stream => {
 
 const snapshot = () => {
     const canvas = document.createElement("canvas")
+    canvas.height = DOMElements.player.videoHeight
+    canvas.width = DOMElements.player.videoWidth
     canvas.style.maxHeight = "30vh"
-    canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, DOMElements.player.videoWidth, DOMElements.player.videoHeight);
+    canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
 
     const dataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
-    link.download = `Snapshot-${Date.UTC()}.png`;
+    link.download = `Snapshot-${Date.now()}.png`;
     link.href = dataURL;
 
     const btn = document.createElement("button")
