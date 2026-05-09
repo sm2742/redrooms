@@ -6,8 +6,9 @@ const elements = {
     logo: document.getElementsByClassName("logo"),
 }
 
-const notify = (msgBody, timeoutms) => {
-    elements.notificationSpan.innerHTML = msgBody
+const notify = (msg, body, timeoutms) => {
+    elements.notificationSpan.innerText = msg
+    body && elements.notificationSpan.append(body)
     elements.notificationSpan.style.display = "inline"
     timeoutms && setTimeout(() => elements.notificationSpan.style.display = "none", timeoutms);
 }

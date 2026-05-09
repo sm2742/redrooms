@@ -17,11 +17,11 @@ const listDevices = list => list.forEach(item => {
 })
 
 const startRecording = () => {
-    if (!DOMElements.audioCheck.checked && !DOMElements.videoCheck.checked) return notify("No media selected", 2000)
+    if (!DOMElements.audioCheck.checked && !DOMElements.videoCheck.checked) return notify("No media selected", timeoutms = 2000)
     // can add more parameters
     const constraints = { audio: DOMElements.audioCheck.checked, video: DOMElements.videoCheck.checked };
-    DOMElements.screenCheck.checked ? navigator.mediaDevices.getDisplayMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, 3000))
-        : navigator.mediaDevices.getUserMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, 3000));
+    DOMElements.screenCheck.checked ? navigator.mediaDevices.getDisplayMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, timeoutms = 3000))
+        : navigator.mediaDevices.getUserMedia(constraints).then(recordStream).catch(err => notify(`The following error occurred: ${err}`, timeoutms = 3000));
 }
 
 const recordStream = stream => {
@@ -36,7 +36,7 @@ const recordStream = stream => {
     mediaRecorder.onstop = e => {
         stream.getTracks().forEach(track => track.stop());
         const blob = new Blob(chunks);
-        notify(`Media Size: ${blob.size} Bytes`, 5000)
+        notify(`Media Size: ${blob.size} Bytes`, timeoutms = 5000)
         chunks = []
         DOMElements.recordBtn.innerText = "Start Recording"
         DOMElements.recordBtn.onclick = startRecording
@@ -52,13 +52,12 @@ const snapshot = () => {
     canvas.height = DOMElements.player.videoHeight
     canvas.width = DOMElements.player.videoWidth
     canvas.getContext('2d').drawImage(DOMElements.player, 0, 0, canvas.width, canvas.height);
-    notify(canvas)
-    DOMElements.deviceList.innerHTML = canvas
+    notify("Snapshot Captured", canvas)
 }
 
 notify("Checking for media devices...")
 if (navigator.mediaDevices) {
-    notify("Media recording supported.", 2000)
+    notify("Media recording supported.", timeoutms = 2000)
     DOMElements.recordBtn.disabled = false
     DOMElements.recordBtn.classList.add("pointer")
     DOMElements.recordBtn.onclick = startRecording
