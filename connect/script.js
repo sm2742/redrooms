@@ -11,13 +11,12 @@ const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a ra
 const onConnection = conn => {
     conn.on("open", () => {
         DOMElements.chatPeer.innerText = conn.peer
+        conn.send("Hello, peer! 👋");
     });
     conn.on("data", data => console.log("Received:", data));
     conn.on("close", () => notify(`Chat connection closed`, null, 2000));
     conn.on("error", err => console.log(err));
     conn.on("iceStateChanged", state => console.log(state));
-
-    conn.send("Hello, peer! 👋");
 }
 
 const onCall = call => {
