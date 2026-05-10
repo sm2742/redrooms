@@ -89,5 +89,5 @@ if (navigator.mediaDevices) {
 } else {
     notify("Media recording not supported.")
 }
-DOMElements.autoSaveCheck.checked = localStorage.getItem("as")
+DOMElements.autoSaveCheck.checked = localStorage.getItem("as") === true ? true : false
 DOMElements.autoSaveCheck.addEventListener("change", e=> localStorage.setItem("as", e.target.checked))
