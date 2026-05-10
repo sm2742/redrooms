@@ -8,6 +8,14 @@ const DOMElements = {
 }
 const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
 
+const onConnection = conn => {
+    DOMElements.chatPeer.innerText = conn.peer
+}
+
+const onCall = call => {
+    DOMElements.callPeer.innerText = call.peer
+}
+
 peer.on("open", id => {
     DOMElements.myID.innerText = id
     DOMElements.myID.classList.add("pointer")
@@ -31,14 +39,6 @@ DOMElements.callBtn.addEventListener("click", () => {
     let call = peer.call(remoteID, new MediaStream());
     onCall(call)
 })
-
-const onConnection = conn => {
-    DOMElements.chatPeer.innerText = conn.peer
-}
-
-const onCall = call => {
-    DOMElements.callPeer.innerText = call.peer
-}
 
 // conn.on("open", () => {
 // });
