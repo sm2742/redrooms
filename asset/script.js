@@ -1,3 +1,4 @@
+let timeout;
 const el = x => document.getElementById(x)
 
 const elements = {
@@ -7,9 +8,13 @@ const elements = {
 }
 
 const notify = (msg, body, timeoutms) => {
+    if (timeout) {
+        clearTimeout(timeout)
+        timeout = null
+    }
     elements.notificationSpan.innerText = msg
     elements.notificationSpan.classList.remove("d-none")
-    timeoutms && setTimeout(() => elements.notificationSpan.classList.add("d-none"), timeoutms);
+    if (timeoutms) timeout = setTimeout(() => elements.notificationSpan.classList.add("d-none"), timeoutms);
     if (body) {
         body.style.maxHeight = "35vh"
         elements.notificationSpan.append(body)

@@ -56,6 +56,7 @@ const generateDlBtn = (filename, dataURL) => {
     btn.innerText = "Save"
     btn.classList.add("btn", "pointer", "prim-bg")
     btn.onclick = () => link.click();
+    document.addEventListener("keyup", e => e.ctrlKey && !e.shiftKey && e.code == "KeyS" && btn.click())
     return btn
 }
 
