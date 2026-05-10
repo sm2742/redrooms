@@ -19,7 +19,9 @@ const onConnection = conn => {
 }
 
 const onCall = call => {
-    call.on("stream", stream => DOMElements.callPeer.innerText = call.peer);
+    call.on("stream", stream => {
+        DOMElements.callPeer.innerText = call.peer
+    });
     call.on("close", () => notify(`Call closed`, null, 2000));
     call.on("error", err => console.log(err));
 }
@@ -33,11 +35,14 @@ peer.on("open", id => {
 });
 peer.on("disconnected", id => notify(`Peer disconnected`, null, 2000));
 peer.on("close", () => notify(`Peer connection closed`, null, 2000));
-peer.on("error", err => console.log(err.type, err));
+peer.on("error", err => notify(err.type, err.message, 2000));
 
-peer.on("connection", conn => notify(`${conn.peer} wants to chat.`, null, 2000) && onConnection(conn));
+peer.on("connection", conn => {
+    notify(`${conn.peer} wants to chat.`, null, 2000)
+    onConnection(conn)
+});
 peer.on("call", call => {
-    if(window.confirm(`${call.peer} is calling`)){
+    if (window.confirm(`${call.peer} is calling`)) {
         call.answer(new MediaStream())
         onCall(call)
     }
