@@ -35,7 +35,7 @@ peer.on("open", id => {
 });
 peer.on("disconnected", id => notify(`Peer disconnected`, null, 2000));
 peer.on("close", () => notify(`Peer connection closed`, null, 2000));
-peer.on("error", err => notify(err.type, err.message, 2000));
+peer.on("error", err => notify(`${err.type}\n${err.message}`, null, 2000));
 
 peer.on("connection", conn => {
     notify(`${conn.peer} wants to chat.`, null, 2000)
