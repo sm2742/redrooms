@@ -19,8 +19,7 @@ const onConnection = conn => {
 }
 
 const onCall = call => {
-    DOMElements.callPeer.innerText = call.peer
-    call.on("stream", stream => console.log(stream));
+    call.on("stream", stream => DOMElements.callPeer.innerText = call.peer);
     call.on("close", () => notify(`Call closed`, null, 2000));
     call.on("error", err => console.log(err));
 }
