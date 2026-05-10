@@ -30,6 +30,9 @@ DOMElements.connectBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
     let conn = peer.connect(remoteID);
+    conn.on("open", x => {
+        console.log(conn, x);
+    });
     onConnection(conn)
 })
 
@@ -40,8 +43,7 @@ DOMElements.callBtn.addEventListener("click", () => {
     onCall(call)
 })
 
-// conn.on("open", () => {
-// });
+
 // conn.send("Hello, peer! 👋");
 
 // // Receive data
