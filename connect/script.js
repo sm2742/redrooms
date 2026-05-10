@@ -20,7 +20,6 @@ const onConnection = conn => {
 }
 
 const onCall = call => {
-    console.log("oncall");
     call.on("stream", stream => {
         DOMElements.callPeer.innerText = call.peer
     });
