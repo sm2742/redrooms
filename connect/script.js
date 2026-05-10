@@ -10,10 +10,20 @@ const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a ra
 
 const onConnection = conn => {
     DOMElements.chatPeer.innerText = conn.peer
+    conn.on("data", data => console.log("Received:", data));
+    conn.on("close", () => notify(`Chat connection closed`, null, 2000));
+    conn.on("error", err => console.log(err));
+    conn.on("iceStateChanged", state => console.log(state));
+
+    conn.send("Hello, peer! 👋");
 }
 
 const onCall = call => {
-    DOMElements.callPeer.innerText = call.peer
+    call.on("stream", stream => {
+        DOMElements.callPeer.innerText = call.peer
+    });
+    call.on("close", () => notify(`Call closed`, null, 2000));
+    call.on("error", err => console.log(err));
 }
 
 peer.on("open", id => {
@@ -23,17 +33,23 @@ peer.on("open", id => {
     DOMElements.connectBtn.disabled = false
     DOMElements.callBtn.disabled = false
 });
-peer.on("connection", onConnection);
-peer.on("call", onCall);
+peer.on("disconnected", id => notify(`Peer disconnected`, null, 2000));
+peer.on("close", () => notify(`Peer connection closed`, null, 2000));
+peer.on("error", err => console.log(err.type, err));
+
+peer.on("connection", conn => notify(`${conn.peer} wants to chat.`, null, 2000) && onConnection(conn));
+peer.on("call", call => {
+    if(window.confirm(`${call.peer} is calling`)){
+        call.answer(new MediaStream())
+        onCall(call)
+    }
+});
 
 DOMElements.connectBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
     let conn = peer.connect(remoteID);
-    conn.on("open", x => {
-        console.log(conn, x);
-    });
-    onConnection(conn)
+    conn.on("open", () => onConnection(conn));
 })
 
 DOMElements.callBtn.addEventListener("click", () => {
@@ -42,20 +58,3 @@ DOMElements.callBtn.addEventListener("click", () => {
     let call = peer.call(remoteID, new MediaStream());
     onCall(call)
 })
-
-
-// conn.send("Hello, peer! 👋");
-
-// // Receive data
-// conn.on("data", (data) => {
-//   console.log("Received:", data);
-// });
-
-// Call a peer, providing our mediaStream
-
-//   call.answer(new);
-
-// call.on("stream", function (stream) {
-//   // `stream` is the MediaStream of the remote peer.
-//   // Here you'd add it to an HTML video/canvas element.
-// });
