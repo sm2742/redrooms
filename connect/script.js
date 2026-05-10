@@ -16,37 +16,45 @@ peer.on("open", id => {
     DOMElements.myID.addEventListener("click", () => navigator.clipboard.writeText(id))
     DOMElements.connectBtn.disabled = false
     DOMElements.callBtn.disabled = false
+    console.log(1, peer);
+});
+
+peer.on("connection", x => {
+    conn = x
+    console.log(2, conn);
+});
+
+peer.on("call", x => {
+    call = x
+    console.log(3, call);
 });
 
 DOMElements.connectBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
     conn = peer.connect(remoteID);
+    console.log(4, conn);
 })
 
 DOMElements.callBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
     call = peer.call(remoteID, new MediaStream());
+    console.log(5, call);
 })
 
-    // conn.on("open", () => {
-    // });
+// conn.on("open", () => {
+// });
 // conn.send("Hello, peer! 👋");
 
 // // Receive data
-// peer.on("connection", (conn) => {
-//   conn.on("data", (data) => {
-//     console.log("Received:", data);
-//   });
+// conn.on("data", (data) => {
+//   console.log("Received:", data);
 // });
 
 // Call a peer, providing our mediaStream
 
-// peer.on("call", function (call) {
-//   // Answer the call, providing our mediaStream
-//   call.answer(mediaStream);
-// });
+//   call.answer(new);
 
 // call.on("stream", function (stream) {
 //   // `stream` is the MediaStream of the remote peer.
