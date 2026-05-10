@@ -13,10 +13,10 @@ const onConnection = conn => {
         DOMElements.chatPeer.innerText = conn.peer
         conn.send("Hello, peer! 👋");
     });
-    conn.on("data", data => console.log("Received:", data));
+    conn.on("data", data => notify(`${conn.peer}: ${data}`, null, 2000));
     conn.on("close", () => notify(`Chat connection closed`, null, 2000));
-    conn.on("error", err => console.log(err));
-    conn.on("iceStateChanged", state => console.log(state));
+    conn.on("error", err => notify(err.message, null, 2000));
+    conn.on("iceStateChanged", state => notify(state, null, 2000));
 }
 
 const onCall = call => {
@@ -24,7 +24,7 @@ const onCall = call => {
         DOMElements.callPeer.innerText = call.peer
     });
     call.on("close", () => notify(`Call closed`, null, 2000));
-    call.on("error", err => console.log(err));
+    call.on("error", err => notify(err.message, null, 2000));
 }
 
 peer.on("open", id => {
@@ -42,10 +42,15 @@ peer.on("connection", conn => {
     notify(`${conn.peer} wants to chat.`, null, 2000)
     onConnection(conn)
 });
-peer.on("call", call => {
+peer.on("call", async (call) => {
     if (window.confirm(`${call.peer} is calling`)) {
-        call.answer(new MediaStream())
-        onCall(call)
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "user" } })
+            call.answer(stream)
+            onCall(call)
+        } catch (err) {
+            notify(`The following error occurred: ${err}`, null, 3000)
+        }
     }
 });
 
@@ -56,9 +61,16 @@ DOMElements.connectBtn.addEventListener("click", () => {
     onConnection(conn)
 })
 
-DOMElements.callBtn.addEventListener("click", () => {
-    const remoteID = DOMElements.remoteID.value
-    if (!remoteID) return;
-    let call = peer.call(remoteID, new MediaStream());
-    onCall(call)
+DOMElements.callBtn.addEventListener("click", async () => {
+    try {
+        const remoteID = DOMElements.remoteID.value
+        if (!remoteID) return;
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "user" } })
+        let call = peer.call(remoteID, stream);
+        onCall(call)
+    } catch (err) {
+        notify(`The following error occurred: ${err}`, null, 3000)
+    }
 })
+
+!navigator.mediaDevices && notify(`Media streaming not supported`, null, 3000)
