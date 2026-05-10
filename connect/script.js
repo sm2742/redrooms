@@ -1,4 +1,3 @@
-let peer, conn, call;
 const DOMElements = {
     myID: el("myID"),
     remoteID: el("remoteID"),
@@ -7,8 +6,7 @@ const DOMElements = {
     chatPeer: el("chatPeer"),
     callPeer: el("callPeer"),
 }
-
-peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
+const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
 
 peer.on("open", id => {
     DOMElements.myID.innerText = id
@@ -16,32 +14,31 @@ peer.on("open", id => {
     DOMElements.myID.addEventListener("click", () => navigator.clipboard.writeText(id))
     DOMElements.connectBtn.disabled = false
     DOMElements.callBtn.disabled = false
-    console.log(1, peer);
 });
-
-peer.on("connection", x => {
-    conn = x
-    console.log(2, conn);
-});
-
-peer.on("call", x => {
-    call = x
-    console.log(3, call);
-});
+peer.on("connection", onConnection);
+peer.on("call", onCall);
 
 DOMElements.connectBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
-    conn = peer.connect(remoteID);
-    console.log(4, conn);
+    let conn = peer.connect(remoteID);
+    onConnection(conn)
 })
 
 DOMElements.callBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
-    call = peer.call(remoteID, new MediaStream());
-    console.log(5, call);
+    let call = peer.call(remoteID, new MediaStream());
+    onCall(call)
 })
+
+const onConnection = conn => {
+    DOMElements.chatPeer.innerText = conn.peer
+}
+
+const onCall = call => {
+    DOMElements.callPeer.innerText = call.peer
+}
 
 // conn.on("open", () => {
 // });
