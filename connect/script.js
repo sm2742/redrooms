@@ -9,7 +9,9 @@ const DOMElements = {
 const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
 
 const onConnection = conn => {
-    DOMElements.chatPeer.innerText = conn.peer
+    conn.on("open", () => {
+        DOMElements.chatPeer.innerText = conn.peer
+    });
     conn.on("data", data => console.log("Received:", data));
     conn.on("close", () => notify(`Chat connection closed`, null, 2000));
     conn.on("error", err => console.log(err));
@@ -52,7 +54,7 @@ DOMElements.connectBtn.addEventListener("click", () => {
     const remoteID = DOMElements.remoteID.value
     if (!remoteID) return;
     let conn = peer.connect(remoteID);
-    conn.on("open", () => onConnection(conn));
+    onConnection(conn)
 })
 
 DOMElements.callBtn.addEventListener("click", () => {
