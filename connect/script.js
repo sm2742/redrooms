@@ -5,6 +5,8 @@ const DOMElements = {
     callBtn: el("callBtn"),
     chatPeer: el("chatPeer"),
     callPeer: el("callPeer"),
+    myPlayer: el("myPlayer"),
+    othPlayer: el("othPlayer"),
 }
 const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
 
@@ -22,6 +24,7 @@ const onConnection = conn => {
 const onCall = call => {
     call.on("stream", stream => {
         DOMElements.callPeer.innerText = call.peer
+        DOMElements.othPlayer.srcObject = stream
     });
     call.on("close", () => notify(`Call closed`, null, 2000));
     call.on("error", err => notify(err.message, null, 2000));
@@ -74,3 +77,10 @@ DOMElements.callBtn.addEventListener("click", async () => {
 })
 
 !navigator.mediaDevices && notify(`Media streaming not supported`, null, 3000)
+
+// conn.close()
+// call.close()
+// peer.listAllPeers(callback)
+// peer.destroy()
+// peer.reconnect()
+// peer.disconnect()
