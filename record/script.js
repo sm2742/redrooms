@@ -4,6 +4,7 @@ const DOMElements = {
     videoCheck: el("videoCheck"),
     screenCheck: el("screenCheck"),
     faceCamCheck: el("faceCamCheck"),
+    autoSaveCheck: el("autoSaveCheck"),
     deviceList: el("deviceList"),
     player: el("player"),
     recordBtn: el("recordBtn"),
@@ -57,6 +58,7 @@ const generateDlBtn = (filename, dataURL) => {
     btn.classList.add("btn", "pointer", "prim-bg")
     btn.onclick = () => link.click();
     document.addEventListener("keyup", e => e.ctrlKey && !e.shiftKey && e.code == "KeyS" && btn.click())
+    DOMElements.autoSaveCheck.checked && btn.click()
     return btn
 }
 
