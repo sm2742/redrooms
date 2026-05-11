@@ -16,15 +16,16 @@ const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a ra
 
 const addMessage = (from, data) => {
     const dataJSON = JSON.parse(data)
+    console.log(dataJSON.file);
     if (dataJSON.text) {
-        const _x = document.createElement("div")
+        const _x = document.createElement("span")
         _x.classList.add("btn", "sec-bg", "mu-2")
         _x.innerText = from + ": " + dataJSON.text
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
         // const a = document.createElement("a")
-        const _x = document.createElement("div")
+        const _x = document.createElement("span")
         _x.classList.add("btn", "sec-bg", "mu-2")
         _x.innerText = from + ": " + dataJSON.file.name
         DOMElements.messages.append(_x)
@@ -34,6 +35,7 @@ const addMessage = (from, data) => {
 const sendMessage = conn => {
     const text = DOMElements.textInput.value
     const file = DOMElements.fileInput.files[0]
+    console.log(file);
     const data = JSON.stringify({text:text, file:file})
     conn.send(data)
     addMessage("Me", data)
