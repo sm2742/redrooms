@@ -7,15 +7,52 @@ const DOMElements = {
     callPeer: el("callPeer"),
     myPlayer: el("myPlayer"),
     othPlayer: el("othPlayer"),
+    messages: el("messages"),
+    textInput: el("textInput"),
+    fileInput: el("fileInput"),
+    sendBtn: el("sendBtn"),
 }
 const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
+
+const addMessage = (from, data) => {
+    const dataJSON = JSON.parse(data)
+    if (dataJSON.text) {
+        const _x = document.createElement("div")
+        _x.classList.add("btn", "sec-bg", "mu-2")
+        _x.innerText = from + ": " + dataJSON.text
+        DOMElements.messages.append(_x)
+    }
+    if (dataJSON.file) {
+        // const a = document.createElement("a")
+        const _x = document.createElement("div")
+        _x.classList.add("btn", "sec-bg", "mu-2")
+        _x.innerText = from + ": " + dataJSON.file.name
+        DOMElements.messages.append(_x)
+    }
+}
+
+const sendMessage = conn => {
+    const text = DOMElements.textInput.value
+    const file = DOMElements.fileInput.files[0]
+    const data = {text:text, file:file}
+    conn.send(JSON.stringify(data))
+    addMessage("Me", data)
+    DOMElements.textInput.value = ""
+    DOMElements.fileInput.value = ""
+}
+
+const startChat = conn => {
+    DOMElements.sendBtn.addEventListener("click", e => sendMessage(conn))
+    DOMElements.textInput.addEventListener("keyup", e => !e.ctrlKey && !e.shiftKey && e.code == "Enter" && sendMessage(conn))
+    DOMElements.sendBtn.disabled = false
+    conn.on("data", data => addMessage(conn.peer, data));
+}
 
 const onConnection = conn => {
     conn.on("open", () => {
         DOMElements.chatPeer.innerText = conn.peer
-        conn.send("Hello, peer! 👋");
+        startChat(conn)
     });
-    conn.on("data", data => notify(`${conn.peer}: ${data}`, null, 2000));
     conn.on("close", () => notify(`Chat connection closed`, null, 2000));
     conn.on("error", err => notify(err.message, null, 2000));
     conn.on("iceStateChanged", state => notify(state, null, 2000));
