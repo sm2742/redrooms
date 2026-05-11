@@ -16,7 +16,6 @@ const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a ra
 
 const addMessage = (from, data) => {
     const dataJSON = JSON.parse(data)
-    console.log(dataJSON.file);
     if (dataJSON.text) {
         const _x = document.createElement("div")
         _x.classList.add("mu-2")
@@ -24,23 +23,45 @@ const addMessage = (from, data) => {
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
-        // const a = document.createElement("a")
+        const blob = new Blob([dataJSON.file.content], { type: dataJSON.file.type });
+        const url = URL.createObjectURL(blob);
+
+        const _link = document.createElement('a');
+        _link.href = url;
+        _link.download = dataJSON.file.name;
+
+        const _btn = document.createElement("button")
+        _btn.classList.add("btn", "sec-bg", "pointer")
+        _btn.addEventListener("click", e => _link.click())
+
         const _x = document.createElement("div")
         _x.classList.add("mu-2")
-        _x.innerText = from + ": " + dataJSON.file.name
+        _x.innerText = `${from}: ${dataJSON.file.name}(${dataJSON.file.size} Bytes)`
+        _x.append(_btn)
         DOMElements.messages.append(_x)
     }
+    DOMElements.messages.scrollTop = DOMElements.messages.scrollHeight
 }
 
 const sendMessage = conn => {
     const text = DOMElements.textInput.value
     const file = DOMElements.fileInput.files[0]
-    console.log(file);
-    const data = JSON.stringify({text:text, file:file})
-    conn.send(data)
-    addMessage("Me", data)
-    DOMElements.textInput.value = ""
-    DOMElements.fileInput.value = ""
+    let data = JSON.stringify({ text: text, file: file })
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            data = JSON.stringify({ text: text, file: { name: file.name, type: file.type, size: file.size, content: e.target.result} })
+            conn.send(data)
+            addMessage("Me", data)
+            DOMElements.textInput.value = ""
+            DOMElements.fileInput.value = ""
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        conn.send(data)
+        addMessage("Me", data)
+        DOMElements.textInput.value = ""
+    }
 }
 
 const startChat = conn => {
