@@ -34,8 +34,8 @@ const addMessage = (from, data) => {
 const sendMessage = conn => {
     const text = DOMElements.textInput.value
     const file = DOMElements.fileInput.files[0]
-    const data = {text:text, file:file}
-    conn.send(JSON.stringify(data))
+    const data = JSON.stringify({text:text, file:file})
+    conn.send(data)
     addMessage("Me", data)
     DOMElements.textInput.value = ""
     DOMElements.fileInput.value = ""
