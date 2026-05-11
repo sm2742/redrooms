@@ -50,10 +50,13 @@ peer.on("call", async (call) => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "user" } })
             call.answer(stream)
+            DOMElements.myPlayer.srcObject = stream
             onCall(call)
         } catch (err) {
             notify(`The following error occurred: ${err}`, null, 3000)
         }
+    } else {
+        call.close()
     }
 });
 
@@ -70,6 +73,7 @@ DOMElements.callBtn.addEventListener("click", async () => {
         if (!remoteID) return;
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "user" } })
         let call = peer.call(remoteID, stream);
+        DOMElements.myPlayer.srcObject = stream
         onCall(call)
     } catch (err) {
         notify(`The following error occurred: ${err}`, null, 3000)
