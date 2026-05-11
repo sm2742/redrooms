@@ -23,6 +23,7 @@ const addMessage = (from, data) => {
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
+        console.log(dataJSON.file);
         const blob = new Blob([dataJSON.file.content], { type: dataJSON.file.type });
         const url = URL.createObjectURL(blob);
 
@@ -31,6 +32,7 @@ const addMessage = (from, data) => {
         _link.download = dataJSON.file.name;
 
         const _btn = document.createElement("button")
+        _btn.innerText = "Save"
         _btn.classList.add("btn", "sec-bg", "pointer")
         _btn.addEventListener("click", e => _link.click())
 
