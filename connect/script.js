@@ -113,8 +113,6 @@ peer.on("call", async (call) => {
         } catch (err) {
             notify(`The following error occurred: ${err}`, null, 3000)
         }
-    } else {
-        call.close()
     }
 });
 
