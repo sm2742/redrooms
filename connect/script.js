@@ -23,6 +23,7 @@ const addMessage = (from, data) => {
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
+        console.log(JSON.parse(dataJSON.file));
         const blob = new Blob([dataJSON.file.content], { type: dataJSON.file.type });
         const url = URL.createObjectURL(blob);
 
@@ -47,22 +48,22 @@ const addMessage = (from, data) => {
 const sendMessage = conn => {
     const text = DOMElements.textInput.value
     const file = DOMElements.fileInput.files[0]
-    let data = JSON.stringify({ text: text, file: file })
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            data = JSON.stringify({ text: text, file: { name: file.name, type: file.type, size: file.size, content: e.target.result} })
-            conn.send(data)
-            addMessage("Me", data)
-            DOMElements.textInput.value = ""
-            DOMElements.fileInput.value = ""
-        };
-        reader.readAsArrayBuffer(file);
-    } else {
+    let data = JSON.stringify({ text: text, file: JSON.stringify(file) })
+    // if (file) {
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //         data = JSON.stringify({ text: text, file: { name: file.name, type: file.type, size: file.size, content: e.target.result} })
+    //         conn.send(data)
+    //         addMessage("Me", data)
+    //         DOMElements.textInput.value = ""
+    //         DOMElements.fileInput.value = ""
+    //     };
+    //     reader.readAsArrayBuffer(file);
+    // } else {
         conn.send(data)
         addMessage("Me", data)
         DOMElements.textInput.value = ""
-    }
+    // }
 }
 
 const startChat = conn => {
