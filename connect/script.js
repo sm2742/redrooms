@@ -23,7 +23,6 @@ const addMessage = (from, data) => {
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
-        console.log(dataJSON.file);
         const blob = new Blob([dataJSON.file.content], { type: dataJSON.file.type });
         const url = URL.createObjectURL(blob);
 
@@ -38,7 +37,7 @@ const addMessage = (from, data) => {
 
         const _x = document.createElement("div")
         _x.classList.add("mu-2")
-        _x.innerText = `${from}: ${dataJSON.file.name}(${dataJSON.file.size} Bytes)`
+        _x.innerText = `${from}: ${dataJSON.file.name} (${dataJSON.file.size} Bytes) `
         _x.append(_btn)
         DOMElements.messages.append(_x)
     }
