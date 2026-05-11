@@ -23,9 +23,8 @@ const addMessage = (from, data) => {
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
-        console.log(dataJSON.file);
         const _link = document.createElement('a');
-        _link.href = dataJSON.file.type + "/" + dataJSON.file.content;
+        _link.href = dataJSON.file.content;
         _link.download = dataJSON.file.name;
 
         const _btn = document.createElement("button")
