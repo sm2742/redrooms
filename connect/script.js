@@ -18,15 +18,15 @@ const addMessage = (from, data) => {
     const dataJSON = JSON.parse(data)
     console.log(dataJSON.file);
     if (dataJSON.text) {
-        const _x = document.createElement("span")
-        _x.classList.add("btn", "sec-bg", "mu-2")
+        const _x = document.createElement("div")
+        _x.classList.add("mu-2")
         _x.innerText = from + ": " + dataJSON.text
         DOMElements.messages.append(_x)
     }
     if (dataJSON.file) {
         // const a = document.createElement("a")
-        const _x = document.createElement("span")
-        _x.classList.add("btn", "sec-bg", "mu-2")
+        const _x = document.createElement("div")
+        _x.classList.add("mu-2")
         _x.innerText = from + ": " + dataJSON.file.name
         DOMElements.messages.append(_x)
     }
