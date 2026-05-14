@@ -41,10 +41,10 @@
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
-        // Import Firebase SDK directly from official Google CDN
-        import { initializeApp } from "gstatic.com";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "gstatic.com";
-        import { getFirestore, doc, setDoc, getDoc } from "gstatic.com";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
+import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
+
 const firebaseConfig = {
     apiKey: "AIzaSyDS7hzEKNArZOLbbiL2QcM2vxDVeSIo3mk",
     authDomain: "webstatic-c507c.firebaseapp.com",
