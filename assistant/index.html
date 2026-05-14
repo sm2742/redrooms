@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A small utility app developed without AI.">
     <meta name="keywords" content="remote access, API, video, cloud, redrooms, red rooms">
-    <title>Record | Red Rooms</title>
+    <title>Assistant | Red Rooms</title>
     <link rel="shortcut icon" href="/asset/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/asset/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,29 +30,7 @@
     <span id="notificationSpan" class="flex flex-column d-none" style="max-height: 40vh;"></span>
     <!-- body -->
     <div class="prim-bg vh-90" style="padding: 4vw;">
-        <div class="flex">
-            <!-- needs nudging -->
-            <label for="screenCheck" class="pointer">Screen: </label>
-            <input type="checkbox" class="pointer ml-14" id="screenCheck">
-            <label for="audioCheck" class="pointer ml-14">Audio : </label>
-            <input type="checkbox" class="pointer ml-14" id="audioCheck">
-            <label for="videoCheck" class="pointer ml-14">Video: </label>
-            <input type="checkbox" class="pointer ml-14" id="videoCheck" checked>
-            <label for="faceCamCheck" class="pointer ml-14">Face Camera: </label>
-            <input type="checkbox" class="pointer ml-14" id="faceCamCheck">
-            <label for="autoSaveCheck" class="pointer ml-14">Auto Save: </label>
-            <input type="checkbox" class="pointer ml-14" id="autoSaveCheck">
-        </div>
-        <div class="flex mu-14">
-            <button class="btn sec-bg" id="recordBtn" disabled>Start Recording</button>
-            <button class="btn sec-bg ml-14" id="snapshot" disabled>Take Snapshot</button>
-        </div>
-        <div class="flex mu-14">
-            <video id="player" style="width: 500px; max-width: 85vw;" autoplay controls muted></video>
-        </div>
-        <div class="mu-14" id="deviceList">
-            Available Devices:
-        </div>
+       
     </div>
     <!-- footer -->
     <div class="sec-bg" style="padding: 1vw 2vw;" id="footer">
@@ -70,7 +48,7 @@
         </div>
     </div>
     <script src="/asset/script.js"></script>
-    <script src="/record/script.js"></script>
+    <script src="/assistant/script.js"></script>
 </body>
 
 </html>
