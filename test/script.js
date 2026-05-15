@@ -9,9 +9,7 @@ class Crypt {
         const regex = new RegExp(`[${this.pass}]`, 'g');
         this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
         this.str2 = ""
-        for (let i = 0; i < this.str1.length; i++) {
-            this.str2 += this.str1[(i + this.pass.length) % this.str1.length]
-        }
+        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[(i + this.pass.length) % this.str1.length]
     }
     encryptText(txt) {
         if (typeof txt !== "string") { throw new Error("Unsupported Data Type") }
@@ -27,7 +25,6 @@ class Crypt {
     }
     // file -> blob
     async compressFile(file) {
-        console.log(file.size, 2);
         const readableStream = file.stream()
         const compressedStream = readableStream.pipeThrough(new CompressionStream("gzip"))
         const compressedBlob = await new Response(compressedStream).blob();
@@ -41,25 +38,22 @@ class Crypt {
         return decompressedBlob
     }
     async encryptFile(file, compression, cb) {
+        const reader = new FileReader();
+        reader.onload = e => cb(this.encryptText(e.target.result))
         if (compression) {
-            console.log(file.size, 1);
             const compressed = await this.compressFile(file)
-            const fileText = await compressed.text()
-            console.log(fileText.slice(0, 10), 3);
-            cb(this.encryptText(fileText))
+            reader.readAsDataURL(compressed);
         } else {
-            const reader = new FileReader();
-            reader.onload = e => cb(this.encryptText(e.target.result))
             reader.readAsDataURL(file);
         }
     }
     async decryptFile(text, compression, cb) {
+        const fileText = this.decryptText(text)
         if (compression) {
-            const fileText = this.decryptText(text)
             const decompressed = await this.decompressFile(fileText)
             cb(URL.createObjectURL(decompressed))
         } else {
-            cb(this.decryptText(text))
+            cb(fileText)
         }
     }
 }
@@ -68,10 +62,16 @@ console.log(MyCrypt.str1);
 console.log(MyCrypt.str2);
 
 el("fin").addEventListener("change", (e) => {
-    MyCrypt.encryptFile(e.target.files[0], el("enc").checked, (x) => { console.log(x.slice(0, 20), x.length) })
-
+    const enc = el("enc").checked
+    MyCrypt.encryptFile(e.target.files[0], enc, (x) => {
+        console.log(x.slice(0, 20), x.length)
+        MyCrypt.decryptFile(x, enc, (y) => {
+            console.log(y.slice(0, 20), y.length);
+        })
+    })
 })
 el("tin").addEventListener("change", (e) => {
-    console.log(MyCrypt.encryptText(e.target.value));
-
+    const enc = MyCrypt.encryptText(e.target.value)
+    console.log(enc);
+    console.log(MyCrypt.decryptText(enc));
 })

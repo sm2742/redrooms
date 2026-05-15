@@ -9,7 +9,7 @@ class Crypt {
         const regex = new RegExp(`[${this.pass}]`, 'g');
         this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
         this.str2 = ""
-        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[i - this.pass.length]
+        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[(i + this.pass.length) % this.str1.length]
     }
     encryptText(txt) {
         if (typeof txt !== "string") { throw new Error("Unsupported Data Type") }
@@ -38,23 +38,22 @@ class Crypt {
         return decompressedBlob
     }
     async encryptFile(file, compression, cb) {
+        const reader = new FileReader();
+        reader.onload = e => cb(this.encryptText(e.target.result))
         if (compression) {
             const compressed = await this.compressFile(file)
-            const fileText = await compressed.text()
-            cb(this.encryptText(fileText))
+            reader.readAsDataURL(compressed);
         } else {
-            const reader = new FileReader();
-            reader.onload = e => cb(this.encryptText(e.target.result))
             reader.readAsDataURL(file);
         }
     }
     async decryptFile(text, compression, cb) {
+        const fileText = this.decryptText(text)
         if (compression) {
-            const fileText = this.decryptText(text)
             const decompressed = await this.decompressFile(fileText)
             cb(URL.createObjectURL(decompressed))
         } else {
-            cb(this.decryptText(text))
+            cb(fileText)
         }
     }
 }
