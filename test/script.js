@@ -33,6 +33,7 @@ class Crypt {
     // text -> blob
     async decompressFile(fileText) {
         console.log(fileText.slice(0, 20), "dcA");
+        console.log(new TextEncoder().encode(fileText), "dcApp");
         const readableStream = new Blob([new TextEncoder().encode(fileText)]).stream();
         const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
         const decompressedBlob = await new Response(decompressedStream).blob();
