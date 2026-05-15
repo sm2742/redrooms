@@ -53,7 +53,7 @@ class Crypt {
         const fileText = this.decryptText(text)
         if (compression) {
             const decompressed = await this.decompressFile(fileText)
-            cb(URL.createObjectURL(decompressed))
+            cb(decompressed)
         } else {
             cb(fileText)
         }
