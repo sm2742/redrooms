@@ -71,9 +71,9 @@ el("fin").addEventListener("change", (e) => {
             const reader = new FileReader();
             reader.onload = e => {
                 const x = document.createElement("a")
-                a.href = e.target.result
-                a.download = "file.png"
-                a.click()
+                x.href = e.target.result
+                x.download = "file.png"
+                x.click()
             }
         })
     })
