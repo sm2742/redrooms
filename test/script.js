@@ -75,6 +75,7 @@ el("fin").addEventListener("change", (e) => {
                 x.download = "file.png"
                 x.click()
             }
+            reader.readAsDataURL(y)
         })
     })
 })
