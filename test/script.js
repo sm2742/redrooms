@@ -9,7 +9,10 @@ class Crypt {
         const regex = new RegExp(`[${this.pass}]`, 'g');
         this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
         this.str2 = ""
-        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[i - this.pass.length]
+        let l = this.pass.length
+        for (let i = 0; i < this.str1.length; i++) {
+            this.str2 += this.str1[(i + l) % l]
+        }
     }
     encryptText(txt) {
         if (typeof txt !== "string") { throw new Error("Unsupported Data Type") }
@@ -62,11 +65,11 @@ const MyCrypt = new Crypt("password")
 console.log(MyCrypt.str1);
 console.log(MyCrypt.str2);
 
-el("fin").addEventListener("change", (e)=>{
-    console.log(MyCrypt.encryptFile(e.target.files[0], el("enc").checked, (x)=>{console.log(x.slice(0, 20), x.length)}));
-    
+el("fin").addEventListener("change", (e) => {
+    console.log(MyCrypt.encryptFile(e.target.files[0], el("enc").checked, (x) => { console.log(x.slice(0, 20), x.length) }));
+
 })
-el("tin").addEventListener("change", (e)=>{
+el("tin").addEventListener("change", (e) => {
     console.log(MyCrypt.encryptText(e.target.value));
-    
+
 })
