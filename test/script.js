@@ -27,6 +27,7 @@ class Crypt {
     }
     // file -> blob
     async compressFile(file) {
+        console.log(file.size, 2);
         const readableStream = file.stream()
         const compressedStream = readableStream.pipeThrough(new CompressionStream("gzip"))
         const compressedBlob = await new Response(compressedStream).blob();
@@ -41,6 +42,7 @@ class Crypt {
     }
     async encryptFile(file, compression, cb) {
         if (compression) {
+            console.log(file.size, 1);
             const compressed = await this.compressFile(file)
             const fileText = await compressed.text()
             cb(this.encryptText(fileText))
