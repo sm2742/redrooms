@@ -58,15 +58,3 @@ class Crypt {
         }
     }
 }
-const MyCrypt = new Crypt("password")
-console.log(MyCrypt.str1);
-console.log(MyCrypt.str2);
-
-el("fin").addEventListener("change", (e)=>{
-    console.log(MyCrypt.encryptFile(e.target.files[0], el("enc").checked, (x)=>{console.log(x.slice(0, 20), x.length)}));
-    
-})
-el("tin").addEventListener("change", (e)=>{
-    console.log(MyCrypt.encryptText(e.target.value));
-    
-})
