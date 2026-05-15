@@ -32,12 +32,12 @@ class Crypt {
     }
     // DataURL -> blob
     async decompressFile(url) {
-            const res = await fetch(url);
-            const resBlob = await res.blob()
-            const readableStream = resBlob.stream()
-            const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
-            const decompressedBlob = await new Response(decompressedStream).blob();
-            return decompressedBlob
+        const res = await fetch(url);
+        const resBlob = await res.blob()
+        const readableStream = resBlob.stream()
+        const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
+        const decompressedBlob = await new Response(decompressedStream).blob();
+        return decompressedBlob
     }
     async encryptFile(file, compression, cb) {
         const reader = new FileReader();
@@ -68,7 +68,13 @@ el("fin").addEventListener("change", (e) => {
     MyCrypt.encryptFile(e.target.files[0], enc, (x) => {
         console.log(x.slice(0, 20), x.length)
         MyCrypt.decryptFile(x, enc, (y) => {
-            console.log(y.slice(0, 20), y.length);
+            const reader = new FileReader();
+            reader.onload = e => {
+                const x = document.createElement("a")
+                a.href = e.target.result
+                a.download = "file.png"
+                a.click()
+            }
         })
     })
 })
