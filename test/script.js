@@ -53,7 +53,7 @@ class Crypt {
         const fileText = this.decryptText(text)
         if (compression) {
             const decompressed = await this.decompressFile(fileText)
-            cb(decompressed)
+            cb(URL.createObjectURL(decompressed))
         } else {
             cb(fileText)
         }
@@ -68,14 +68,7 @@ el("fin").addEventListener("change", (e) => {
     MyCrypt.encryptFile(e.target.files[0], enc, (x) => {
         console.log(x.slice(0, 20), x.length)
         MyCrypt.decryptFile(x, enc, (y) => {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const x = document.createElement("a")
-                x.href = e.target.result
-                x.download = "file.png"
-                x.click()
-            }
-            reader.readAsDataURL(y)
+            console.log(y);
         })
     })
 })
