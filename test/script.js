@@ -30,9 +30,11 @@ class Crypt {
         const compressedBlob = await new Response(compressedStream).blob();
         return compressedBlob
     }
-    // text -> blob
-    async decompressFile(fileText) {
-            const readableStream = new Response(fileText).body;
+    // DataURL -> blob
+    async decompressFile(url) {
+            const res = await fetch(url);
+            const resBlob = await res.blob()
+            const readableStream = resBlob.stream()
             const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
             const decompressedBlob = await new Response(decompressedStream).blob();
             return decompressedBlob
@@ -50,9 +52,7 @@ class Crypt {
     async decryptFile(text, compression, cb) {
         const fileText = this.decryptText(text)
         if (compression) {
-            console.log(fileText.slice(0, 20));
             const decompressed = await this.decompressFile(fileText)
-            console.log(typeof decompressed, decompressed.size);
             cb(URL.createObjectURL(decompressed))
         } else {
             cb(fileText)
