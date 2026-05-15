@@ -11,6 +11,8 @@ class Crypt {
         this.str2 = ""
         let l = this.pass.length
         for (let i = 0; i < this.str1.length; i++) {
+            console.log((i + l) % l);
+            
             this.str2 += this.str1[(i + l) % l]
         }
     }
