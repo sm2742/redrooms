@@ -45,6 +45,7 @@ class Crypt {
             console.log(file.size, 1);
             const compressed = await this.compressFile(file)
             const fileText = await compressed.text()
+            console.log(fileText.slice(0, 10), 3);
             cb(this.encryptText(fileText))
         } else {
             const reader = new FileReader();
