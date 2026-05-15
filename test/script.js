@@ -9,11 +9,8 @@ class Crypt {
         const regex = new RegExp(`[${this.pass}]`, 'g');
         this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
         this.str2 = ""
-        let l = this.pass.length
         for (let i = 0; i < this.str1.length; i++) {
-            console.log((i + l) % l);
-            
-            this.str2 += this.str1[(i + l) % l]
+            this.str2 += this.str1[(i + this.pass.length) % this.str1.length]
         }
     }
     encryptText(txt) {
