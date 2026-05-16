@@ -102,10 +102,9 @@ const init = () => {
     el("fl").oninput = e => {
         const cmp = el("cmp").checked
         cr.encryptFile(e.target.files[0], cmp, (x)=>{
-            console.log(x);
+            console.log(x.slice(0, 50));
             cr.decryptFile(x, cmp, (y)=>{
-                console.log(y);
-                nf.notify(x+" | "+y, null, 3000)
+                console.log(y.slice(0, 50));
             })
         })
     }
