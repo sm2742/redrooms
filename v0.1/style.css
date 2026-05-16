@@ -1,0 +1,133 @@
+:root {
+    --primary-bg: rgb(14, 129, 81);
+    --primary-text: rgb(136, 136, 136);
+    --secondary-bg: rgb(9, 34, 19);
+    --secondary-text: rgb(94, 149, 142);
+    --hover-bg: rgb(8, 114, 91);
+    --active-bg: rgb(2, 27, 22);
+    --disabled-bg: rgb(111, 138, 132);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.stack-sans-text-regular {
+    font-family: "Stack Sans Text", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.prim-bg {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+}
+
+.sec-bg {
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.ml-14 {
+    margin-left: 14px;
+}
+
+.mr-14 {
+    margin-right: 14px;
+}
+
+.mu-14 {
+    margin-top: 14px;
+}
+
+.mu-2 {
+    margin-top: 2px;
+}
+
+.btn {
+    border: 2px solid var(--secondary-bg);
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 100ms;
+}
+
+.btn:hover {
+    background-color: var(--hover-bg);
+}
+
+.btn:active {
+    background-color: var(--active-bg);
+}
+
+.btn:disabled {
+    background-color: var(--disabled-bg);
+}
+
+.nav-link {
+    color: var(--secondary-text);
+    transition: all 100ms;
+}
+
+.nav-link:hover {
+    color: var(--hover-bg);
+}
+
+.nav-link:active {
+    color: var(--active-bg);
+}
+
+.logo {
+    border-radius: 20px;
+}
+
+#notificationSpan {
+    padding: 4px 6px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-bg);
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
+    position: absolute;
+    bottom: 10vh;
+    right: 2vw;
+}
+
+#footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 1vw 2vw;
+}
+
+.d-none {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .hide-mobile {
+        display: none;
+    }
+
+    #footer {
+        grid-template-columns: auto;
+    }
+}
