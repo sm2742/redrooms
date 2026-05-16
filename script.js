@@ -105,6 +105,10 @@ const init = () => {
             console.log(x.slice(0, 50));
             cr.decryptFile(x, cmp, (y)=>{
                 console.log(y.slice(0, 50));
+                const a = document.createElement("a")
+                a.href = y
+                a.download = "file.png"
+                a.click()
             })
         })
     }
