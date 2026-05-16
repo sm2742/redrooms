@@ -102,9 +102,9 @@ const init = () => {
     el("fl").oninput = e => {
         const cmp = el("cmp").checked
         cr.encryptFile(e.target.files[0], cmp, (x)=>{
-            console.log(x.slice(0, 50));
+            console.log(x.slice(0, 50), x.length);
             cr.decryptFile(x, cmp, (y)=>{
-                console.log(y.slice(0, 50));
+                console.log(y.slice(0, 50), y.length);
                 const a = document.createElement("a")
                 a.href = y
                 a.download = "file.png"
