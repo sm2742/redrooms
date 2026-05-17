@@ -135,6 +135,8 @@ class Peering {
         }
     }
     init(id, options = null) {
+        console.log(id, options);
+        
         this.myid && this.reset()
         this.peer = new Peer(id, options)
         this.peer.on("open", id => {
