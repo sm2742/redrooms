@@ -1,4 +1,4 @@
-import { Peer } from "https://esm.sh";
+"use strict"
 const el = x => document.getElementById(x)
 const ELEMENTS = {
     loginBtn: el("loginBtn") || null,
