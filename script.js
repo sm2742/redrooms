@@ -194,7 +194,7 @@ const pr = new Peering()
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    pr.onPeerConn = (id) => console.log(id);
+    pr.onPeerOpen = (id) => console.log(id);
     pr.init()
 }
 init()
