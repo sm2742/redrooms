@@ -1,4 +1,8 @@
 "use strict"
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
+import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
+
 const el = x => document.getElementById(x)
 const ELEMENTS = {
     loginBtn: el("loginBtn") || null,
@@ -94,18 +98,18 @@ const cr = new Crypt()
 class Peering {
     get callpeer() { return this.call?.peer }
     get connpeer() { return this.conn?.peer }
-    set onPeerOpen(cb) { this._onPeerOpen = cb }
-    set onPeerDisc(cb) { this._onPeerDisc = cb }
-    set onErr(cb) { this._onErr = cb }
-    set onPeerClose(cb) { this._onPeerClose = cb }
-    set onPeerConn(cb) { this._onPeerConn = cb }
-    set onPeerCall(cb) { this._onPeerCall = cb }
-    set onConnOpen(cb) { this._onConnOpen = cb }
-    set onConnData(cb) { this._onConnData = cb }
-    set onConnClose(cb) { this._onConnClose = cb }
-    set onConnStateChange(cb) { this._onConnStateChange = cb }
-    set onCallStream(cb) { this._onCallStream = cb }
-    set onCallClose(cb) { this._onCallClose = cb }
+    set onPeerOpen(cb) { this.onPeerOpen = cb }
+    set onPeerDisc(cb) { this.onPeerDisc = cb }
+    set onErr(cb) { this.onErr = cb }
+    set onPeerClose(cb) { this.onPeerClose = cb }
+    set onInConn(cb) { this.onInConn = cb }
+    set onInCall(cb) { this.onInCall = cb }
+    set onConnOpen(cb) { this.onConnOpen = cb }
+    set onConnData(cb) { this.onConnData = cb }
+    set onConnClose(cb) { this.onConnClose = cb }
+    set onConnStateChange(cb) { this.onConnStateChange = cb }
+    set onCallStream(cb) { this.onCallStream = cb }
+    set onCallClose(cb) { this.onCallClose = cb }
     reset() {
         this.peer?.destroy()
         this.myid = null
@@ -135,27 +139,25 @@ class Peering {
         }
     }
     init(id = null, options = null) {
-        console.log(id, options);
-        
         this.myid && this.reset()
         this.peer = new Peer(id, options)
         this.peer.on("open", id => {
             this.myid = id
-            this._onPeerOpen && this._onPeerOpen(id)
+            this.onPeerOpen && this.onPeerOpen(id)
         });
-        this.peer.on("disconnected", id => { this._onPeerDisc && this._onPeerDisc(id) });
-        this.peer.on("error", err => { this._onErr && this._onErr(err) });
+        this.peer.on("disconnected", id => { this.onPeerDisc && this.onPeerDisc(id) });
+        this.peer.on("error", err => { this.onErr && this.onErr(err) });
         this.peer.on("close", () => {
             this.reset()
-            this._onPeerClose && this._onPeerClose()
+            this.onPeerClose && this.onPeerClose()
         });
         this.peer.on("connection", conn => {
             this._handleconn(conn)
-            this._onPeerConn && this._onPeerConn(conn.peer)
+            this.onInConn && this.onInConn(conn.peer)
         });
         this.peer.on("call", call => {
             this._handlecall(call)
-            this._onPeerCall && this._onPeerCall(call.peer)
+            this.onInCall && this.onInCall(call.peer)
         });
         // peer.listAllPeers(callback)
         // peer.destroy()
@@ -163,38 +165,52 @@ class Peering {
         // peer.disconnect()
     }
     _handleconn(conn) {
-        conn.on("data", data => { this._onConnData && this.onConnData(data) });
+        conn.on("data", data => { this.onConnData && this.onConnData(data) });
         conn.on("open", () => {
             this.conn = conn
-            this._onConnOpen && this._onConnOpen()
+            this.onConnOpen && this.onConnOpen()
         });
         conn.on("close", () => {
             this.conn = null
-            this._onConnClose && this._onConnClose()
+            this.onConnClose && this.onConnClose()
         });
-        conn.on("error", err => { this._onErr && this._onErr(err) });
-        conn.on("iceStateChanged", state => { this._onConnStateChange && this._onConnStateChange(state) });
+        conn.on("error", err => { this.onErr && this.onErr(err) });
+        conn.on("iceStateChanged", state => { this.onConnStateChange && this.onConnStateChange(state) });
         // conn.close()
     }
     _handlecall(call) {
-        call.on("stream", stream => { this._onCallStream && this._onCallStream(stream) })
+        call.on("stream", stream => { this.onCallStream && this.onCallStream(stream) })
         call.on("open", () => {
             console.log("test call open");
         });
         call.on("close", () => {
             this.call = null
-            this._onCallClose && this._onCallClose()
+            this.onCallClose && this.onCallClose()
         })
-        call.on("error", err => { this._onErr && this._onErr(err) })
+        call.on("error", err => { this.onErr && this.onErr(err) })
         this.call = call
         // call.close()
     }
 }
 const pr = new Peering()
 
+class FirestoreDB {
+    constructor (config){
+        this.config = config
+        this.app = initializeApp(config);
+        this.db = getFirestore(this.app);
+    }
+}
+const db = new FirestoreDB({
+    apiKey: "AIzaSyDS7hzEKNArZOLbbiL2QcM2vxDVeSIo3mk",
+    authDomain: "webstatic-c507c.firebaseapp.com",
+    projectId: "webstatic-c507c",
+    storageBucket: "webstatic-c507c.firebasestorage.app",
+    messagingSenderId: "874107128529",
+    appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
+})
+
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    pr.onPeerOpen = (id) => console.log(id);
-    pr.init()
 }
 init()
