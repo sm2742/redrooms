@@ -7,24 +7,25 @@ const ELEMENTS = {
 }
 
 class Notify {
-    constructor() {
+    constructor(notificationSpan) {
         this.timeout = null;
+        this.notificationSpan = notificationSpan
     }
     notify(msg, body, timeoutms) {
         if (this.timeout) {
             clearTimeout(this.timeout)
             this.timeout = null
         }
-        ELEMENTS.notificationSpan.innerText = msg
-        ELEMENTS.notificationSpan.classList.remove("d-none")
-        if (timeoutms) this.timeout = setTimeout(() => ELEMENTS.notificationSpan.classList.add("d-none"), timeoutms);
+        this.notificationSpan.innerText = msg
+        this.notificationSpan.classList.remove("d-none")
+        if (timeoutms) this.timeout = setTimeout(() => this.notificationSpan.classList.add("d-none"), timeoutms);
         if (body) {
             body.style.maxHeight = "35vh"
-            ELEMENTS.notificationSpan.append(body)
+            this.notificationSpan.append(body)
         }
     }
 }
-const nf = new Notify()
+const nf = new Notify(ELEMENTS.notificationSpan)
 
 class Crypt {
     static baseStr = "CDE\\yzABFGvwx~!@#$%^&*()_+-67890 `:;HIJKL=|mnopqPQRSTUVWX}{[]\"ghijklYZ12345MNOdefabcrstu'?><,./"
@@ -90,27 +91,108 @@ class Crypt {
 }
 const cr = new Crypt()
 
+class Peering {
+    get callpeer() { return this.call?.peer }
+    get connpeer() { return this.conn?.peer }
+    set onPeerOpen(cb) { this._onPeerOpen = cb }
+    set onPeerDisc(cb) { this._onPeerDisc = cb }
+    set onErr(cb) { this._onErr = cb }
+    set onPeerClose(cb) { this._onPeerClose = cb }
+    set onPeerConn(cb) { this._onPeerConn = cb }
+    set onPeerCall(cb) { this._onPeerCall = cb }
+    set onConnOpen(cb) { this._onConnOpen = cb }
+    set onConnData(cb) { this._onConnData = cb }
+    set onConnClose(cb) { this._onConnClose = cb }
+    set onConnStateChange(cb) { this._onConnStateChange = cb }
+    set onCallStream(cb) { this._onCallStream = cb }
+    set onCallClose(cb) { this._onCallClose = cb }
+    reset() {
+        this.peer?.destroy()
+        this.myid = null
+        this.conn = null
+        this.call = null
+    }
+    connectChat = id => {
+        if (this.myid) {
+            const conn = this.peer?.connect(id)
+            this._handleconn(conn)
+        }
+    }
+    makeCall = (id, stream) => {
+        if (this.myid) {
+            const call = this.peer?.call(id, stream)
+            this._handlecall(call)
+        }
+    }
+    answerCall = stream => {
+        if (this.myid && this.call) {
+            this.call.answer(stream)
+        }
+    }
+    send = data => {
+        if (this.myid && this.conn) {
+            this.conn.send(data)
+        }
+    }
+    init(id, options = null) {
+        this.myid && this.reset()
+        this.peer = new Peer(id, options)
+        this.peer.on("open", id => {
+            this.myid = id
+            this._onPeerOpen && this._onPeerOpen(id)
+        });
+        this.peer.on("disconnected", id => { this._onPeerDisc && this._onPeerDisc(id) });
+        this.peer.on("error", err => { this._onErr && this._onErr(err) });
+        this.peer.on("close", () => {
+            this.reset()
+            this._onPeerClose && this._onPeerClose()
+        });
+        this.peer.on("connection", conn => {
+            this._handleconn(conn)
+            this._onPeerConn && this._onPeerConn(conn.peer)
+        });
+        this.peer.on("call", call => {
+            this._handlecall(call)
+            this._onPeerCall && this._onPeerCall(call.peer)
+        });
+        // peer.listAllPeers(callback)
+        // peer.destroy()
+        // peer.reconnect()
+        // peer.disconnect()
+    }
+    _handleconn(conn) {
+        conn.on("data", data => { this._onConnData && this.onConnData(data) });
+        conn.on("open", () => {
+            this.conn = conn
+            this._onConnOpen && this._onConnOpen()
+        });
+        conn.on("close", () => {
+            this.conn = null
+            this._onConnClose && this._onConnClose()
+        });
+        conn.on("error", err => { this._onErr && this._onErr(err) });
+        conn.on("iceStateChanged", state => { this._onConnStateChange && this._onConnStateChange(state) });
+        // conn.close()
+    }
+    _handlecall(call) {
+        call.on("stream", stream => { this._onCallStream && this._onCallStream(stream) })
+        call.on("open", () => {
+            console.log("test call open");
+        });
+        call.on("close", () => {
+            this.call = null
+            this._onCallClose && this._onCallClose()
+        })
+        call.on("error", err => { this._onErr && this._onErr(err) })
+        this.call = call
+        // call.close()
+    }
+}
+const pr = new Peering()
+
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    el("txt").oninput = e => {
-        const x = cr.encryptText(e.target.value)
-        console.log(x);
-        const y = cr.decryptText(x)
-        console.log(y);
-        nf.notify(x+" | "+y, null, 3000)
-    }
-    el("fl").oninput = e => {
-        const cmp = el("cmp").checked
-        cr.encryptFile(e.target.files[0], cmp, (x)=>{
-            console.log(x.slice(0, 50), x.length);
-            cr.decryptFile(x, cmp, (y)=>{
-                console.log(y.slice(0, 50), y.length);
-                const a = document.createElement("a")
-                a.href = y
-                a.download = "file.png"
-                a.click()
-            })
-        })
-    }
+    pr.onPeerConn = (id) => console.log(id);
+    pr.init()
 }
 init()

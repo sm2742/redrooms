@@ -140,7 +140,3 @@ DOMElements.callBtn.addEventListener("click", async () => {
 
 // conn.close()
 // call.close()
-// peer.listAllPeers(callback)
-// peer.destroy()
-// peer.reconnect()
-// peer.disconnect()
