@@ -1,9 +1,3 @@
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const SpeechRecognitionEvent =
-  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
-  const recognition = new SpeechRecognition();
 
   recognition.continuous = false;
 recognition.lang = "en-US";

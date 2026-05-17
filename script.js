@@ -1,7 +1,7 @@
 "use strict"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
-import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
+import { getAuth, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
 
 const el = x => document.getElementById(x)
 const ELEMENTS = {
@@ -57,40 +57,46 @@ class Crypt {
         for (let i = 0; i < txt.length; i++) x += this.str1[this.str2.indexOf(txt[i])]
         return x
     }
-    // file -> blob
     async compressFile(file) {
-        const readableStream = file.stream()
-        const compressedStream = readableStream.pipeThrough(new CompressionStream("gzip"))
-        const compressedBlob = await new Response(compressedStream).blob();
-        return compressedBlob
+        try {
+            const readableStream = file.stream()
+            const compressedStream = readableStream.pipeThrough(new CompressionStream("gzip"))
+            const compressedBlob = await new Response(compressedStream).blob();
+            return compressedBlob
+        } catch (e) { throw e }
     }
-    // DataURL -> blob
     async decompressFile(url) {
-        const res = await fetch(url);
-        const resBlob = await res.blob()
-        const readableStream = resBlob.stream()
-        const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
-        const decompressedBlob = await new Response(decompressedStream).blob();
-        return decompressedBlob
+        try {
+            const res = await fetch(url);
+            const resBlob = await res.blob()
+            const readableStream = resBlob.stream()
+            const decompressedStream = readableStream.pipeThrough(new DecompressionStream("gzip"))
+            const decompressedBlob = await new Response(decompressedStream).blob();
+            return decompressedBlob
+        } catch (e) { throw e }
     }
     async encryptFile(file, compression, cb) {
-        const reader = new FileReader();
-        reader.onload = e => cb(this.encryptText(e.target.result))
-        if (compression) {
-            const compressed = await this.compressFile(file)
-            reader.readAsDataURL(compressed);
-        } else {
-            reader.readAsDataURL(file);
-        }
+        try {
+            const reader = new FileReader();
+            reader.onload = e => cb(this.encryptText(e.target.result))
+            if (compression) {
+                const compressed = await this.compressFile(file)
+                reader.readAsDataURL(compressed);
+            } else {
+                reader.readAsDataURL(file);
+            }
+        } catch (e) { throw e }
     }
     async decryptFile(text, compression, cb) {
-        const fileText = this.decryptText(text)
-        if (compression) {
-            const decompressed = await this.decompressFile(fileText)
-            cb(URL.createObjectURL(decompressed))
-        } else {
-            cb(fileText)
-        }
+        try {
+            const fileText = this.decryptText(text)
+            if (compression) {
+                const decompressed = await this.decompressFile(fileText)
+                cb(URL.createObjectURL(decompressed))
+            } else {
+                cb(fileText)
+            }
+        } catch (e) { throw e }
     }
 }
 const cr = new Crypt()
@@ -140,7 +146,9 @@ class Peering {
     }
     init(id = null, options = null) {
         this.myid && this.reset()
-        this.peer = new Peer(id, options)
+        try {
+            this.peer = new Peer(id, options)
+        } catch (e) { throw e }
         this.peer.on("open", id => {
             this.myid = id
             this.onPeerOpen && this.onPeerOpen(id)
@@ -195,10 +203,48 @@ class Peering {
 const pr = new Peering()
 
 class FirestoreDB {
-    constructor (config){
-        this.config = config
+    constructor(config) {
         this.app = initializeApp(config);
+        this.auth = getAuth(this.app);
         this.db = getFirestore(this.app);
+    }
+    loginUser = async (email, password) => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+            this.user = userCredential.user;
+        } catch (e) { throw e }
+    }
+    logoutUser = async () => {
+        try {
+            await signOut(this.auth);
+        } catch (e) { throw e }
+    }
+    createDocument = async (collectionName, data) => {
+        try {
+            const docRef = await addDoc(collection(this.db, collectionName), data);
+            return docRef.id;
+        } catch (e) { throw e }
+    }
+    readDocuments = async (collectionName) => {
+        try {
+            const querySnapshot = await getDocs(collection(this.db, collectionName));
+            const docsList = [];
+            querySnapshot.forEach((doc) => {
+                docsList.push({ id: doc.id, ...doc.data() });
+            });
+            return docsList;
+        } catch (e) { throw e }
+    }
+    updateDocument = async (collectionName, documentId, updatedData) => {
+        try {
+            const docRef = doc(this.db, collectionName, documentId);
+            await updateDoc(docRef, updatedData);
+        } catch (e) { throw e }
+    }
+    deleteDocument = async (collectionName, documentId) => {
+        try {
+            await deleteDoc(doc(this.db, collectionName, documentId));
+        } catch (e) { throw e }
     }
 }
 const db = new FirestoreDB({
@@ -209,6 +255,14 @@ const db = new FirestoreDB({
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
+
+class Talk {
+    constructor () {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {throw new Error("Speech recognition not supported")}
+        this.recognition = new SpeechRecognition();
+    }
+}
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
