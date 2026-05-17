@@ -134,7 +134,7 @@ class Peering {
             this.conn.send(data)
         }
     }
-    init(id, options = null) {
+    init(id = null, options = null) {
         console.log(id, options);
         
         this.myid && this.reset()
