@@ -305,8 +305,7 @@ const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
     setInterval(()=>{
         nf.notify("hello", null, 2000)
-console.log(tk.voices);
 
-    }, 2000)
+    }, 500)
 }
 init()
