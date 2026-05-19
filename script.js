@@ -300,6 +300,8 @@ class Talk {
     }
 }
 const tk = new Talk()
+console.log(tk.voices);
+
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
