@@ -270,9 +270,6 @@ class Talk {
         recognition.onspeechend = () => { recognition.stop() }
         this.recognition = recognition
         this.synth.onvoiceschanged = this.loadVoices
-        while (!this.voices || this.voices.length === 0) {
-            this.loadVoices()
-        }
     }
     async localLang(lang = "en-US", cb) {
         const stat = await this.SpeechRecognition.available({ langs: [lang], processLocally: true })
@@ -286,6 +283,9 @@ class Talk {
     }
     loadVoices() { this.voices = this.synth?.getVoices() }
     speak(txt) {
+        while (!this.voices || this.voices.length === 0) {
+            this.loadVoices()
+        }
         const utter = new SpeechSynthesisUtterance(txt);
         if (this.voice) {
             for (const voice of this.voices) {
@@ -308,7 +308,7 @@ const init = () => {
     setInterval(() => {
         nf.notify("hello", null, 2000)
         console.log(tk.voices);
-        
     }, 100)
+    tk.speak("hello")
 }
 init()
