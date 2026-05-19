@@ -270,7 +270,6 @@ class Talk {
         recognition.onspeechend = () => { recognition.stop() }
         this.recognition = recognition
         this.synth.onvoiceschanged = this.loadVoices
-        this.loadVoices()
     }
     async localLang(lang = "en-US", cb) {
         const stat = await this.SpeechRecognition.available({ langs: [lang], processLocally: true })
@@ -282,7 +281,7 @@ class Talk {
             else { cb(`${lang} language pack failed to download. Try again later.`) }
         }
     }
-    loadVoices() { this.voices = this.synth.getVoices() }
+    loadVoices() { this.voices = this.synth?.getVoices() }
     speak(txt) {
         const utter = new SpeechSynthesisUtterance(txt);
         if (this.voice) {
