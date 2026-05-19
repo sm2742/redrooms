@@ -270,7 +270,9 @@ class Talk {
         recognition.onspeechend = () => { recognition.stop() }
         this.recognition = recognition
         this.synth.onvoiceschanged = this.loadVoices
-        this.loadVoices()
+        while (!this.voices || this.voices.length === 0) {
+            this.loadVoices()
+        }
     }
     async localLang(lang = "en-US", cb) {
         const stat = await this.SpeechRecognition.available({ langs: [lang], processLocally: true })
@@ -292,10 +294,10 @@ class Talk {
                 }
             }
         }
-        if (this.pitch) {utter.pitch = this.pitch }
-        if (this.rate) {utter.rate = this.rate }
-        if (this.onPause) { utter.onpause}
-        if (this.onEnd) { utter.onend}
+        if (this.pitch) { utter.pitch = this.pitch }
+        if (this.rate) { utter.rate = this.rate }
+        if (this.onPause) { utter.onpause }
+        if (this.onEnd) { utter.onend }
         this.synth.speak(utter)
     }
 }
@@ -303,9 +305,10 @@ const tk = new Talk()
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    setInterval(()=>{
+    setInterval(() => {
         nf.notify("hello", null, 2000)
-
-    }, 500)
+        console.log(tk.voices);
+        
+    }, 100)
 }
 init()
