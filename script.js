@@ -270,6 +270,7 @@ class Talk {
         recognition.onspeechend = () => { recognition.stop() }
         this.recognition = recognition
         this.synth.onvoiceschanged = this.loadVoices
+        this.loadVoices()
     }
     async localLang(lang = "en-US", cb) {
         const stat = await this.SpeechRecognition.available({ langs: [lang], processLocally: true })
@@ -299,11 +300,9 @@ class Talk {
     }
 }
 const tk = new Talk()
-console.log(tk.voices);
-
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    setInterval(nf.notify("hello", null, 2000), 500)
+    setInterval(nf.notify("hello", null, 2000), 2000)
 }
 init()
