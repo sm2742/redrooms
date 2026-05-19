@@ -284,7 +284,7 @@ class Talk {
     loadVoices() { this.voices = this.synth?.getVoices() }
     speak(txt) {
         const utter = new SpeechSynthesisUtterance(txt);
-        if (this.voice) {
+        if (this.voice && this.voices) {
             for (const voice of this.voices) {
                 if (voice.name === this.voice) {
                     utter.voice = voice;
