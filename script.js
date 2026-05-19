@@ -302,10 +302,6 @@ const tk = new Talk()
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    setInterval(() => {
-        nf.notify("hello", null, 2000)
-        console.log(tk.voices);
-    }, 100)
     tk.speak("hello")
 }
 init()
