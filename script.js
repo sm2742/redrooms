@@ -11,16 +11,19 @@ const ELEMENTS = {
 }
 
 class Notify {
-    constructor(notificationSpan) {
+    constructor(notificationSpan, audioFile) {
+        this.sound = new Audio(audioFile)
         this.timeout = null;
         this.notificationSpan = notificationSpan
     }
     notify(msg, body, timeoutms) {
+        this.sound.pause()
         if (this.timeout) {
             clearTimeout(this.timeout)
             this.timeout = null
         }
         this.notificationSpan.innerText = msg
+        this.sound.play()
         this.notificationSpan.classList.remove("d-none")
         if (timeoutms) this.timeout = setTimeout(() => this.notificationSpan.classList.add("d-none"), timeoutms);
         if (body) {
@@ -29,7 +32,7 @@ class Notify {
         }
     }
 }
-const nf = new Notify(ELEMENTS.notificationSpan)
+const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
 
 class Crypt {
     static baseStr = "CDE\\yzABFGvwx~!@#$%^&*()_+-67890 `:;HIJKL=|mnopqPQRSTUVWX}{[]\"ghijklYZ12345MNOdefabcrstu'?><,./"
@@ -37,29 +40,31 @@ class Crypt {
         this.updatePass(pass)
     }
     updatePass(pass) {
-        if (!pass || typeof pass !== "string") { throw new Error("Passkey must be string") }
-        if (pass.length <= 2 || pass.length >= 95) { throw new Error("Passkey must be 3 to 94 chars long") }
+        if (!pass || typeof pass !== "string") { throw new Error("Enter a valid passkey") }
+        if (pass.length <= 2 || pass.length >= 91) { throw new Error("Passkey must be 3 to 90 chars long") }
         this.pass = pass
         const regex = new RegExp(`[${this.pass}]`, 'g');
-        this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
-        this.str2 = ""
-        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[(i + this.pass.length) % this.str1.length]
+        this.str = Crypt.baseStr.replace(regex, '') + this.pass
     }
     encryptText(txt) {
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
+        const pl = this.pass.length
+        const sl = this.str.length
         let x = ""
-        for (let i = 0; i < txt.length; i++) x += this.str2[this.str1.indexOf(txt[i])]
+        for (let i = 0; i < txt.length; i++) x += this.str[(this.str.indexOf(txt[i]) + pl) % sl]
         return x
     }
     decryptText(txt) {
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
+        const pl = this.pass.length
+        const sl = this.str.length
         let x = ""
-        for (let i = 0; i < txt.length; i++) x += this.str1[this.str2.indexOf(txt[i])]
+        for (let i = 0; i < txt.length; i++) x += this.str[(this.str.indexOf(txt[i]) - pl) % sl]
         return x
     }
-    async compressFile(file) {
+    async compressFile(fileOrBlob) {
         try {
-            const readableStream = file.stream()
+            const readableStream = fileOrBlob.stream()
             const compressedStream = readableStream.pipeThrough(new CompressionStream("gzip"))
             const compressedBlob = await new Response(compressedStream).blob();
             return compressedBlob
@@ -92,9 +97,9 @@ class Crypt {
             const fileText = this.decryptText(text)
             if (compression) {
                 const decompressed = await this.decompressFile(fileText)
-                cb(URL.createObjectURL(decompressed))
+                cb(URL.createObjectURL(decompressed))   // object url
             } else {
-                cb(fileText)
+                cb(fileText)    // file url
             }
         } catch (e) { throw e }
     }
@@ -104,18 +109,6 @@ const cr = new Crypt()
 class Peering {
     get callpeer() { return this.call?.peer }
     get connpeer() { return this.conn?.peer }
-    set onPeerOpen(cb) { this.onPeerOpen = cb }
-    set onPeerDisc(cb) { this.onPeerDisc = cb }
-    set onErr(cb) { this.onErr = cb }
-    set onPeerClose(cb) { this.onPeerClose = cb }
-    set onInConn(cb) { this.onInConn = cb }
-    set onInCall(cb) { this.onInCall = cb }
-    set onConnOpen(cb) { this.onConnOpen = cb }
-    set onConnData(cb) { this.onConnData = cb }
-    set onConnClose(cb) { this.onConnClose = cb }
-    set onConnStateChange(cb) { this.onConnStateChange = cb }
-    set onCallStream(cb) { this.onCallStream = cb }
-    set onCallClose(cb) { this.onCallClose = cb }
     reset() {
         this.peer?.destroy()
         this.myid = null
@@ -204,14 +197,14 @@ const pr = new Peering()
 
 class FirestoreDB {
     constructor(config) {
-        this.app = initializeApp(config);
-        this.auth = getAuth(this.app);
-        this.db = getFirestore(this.app);
+        const app = initializeApp(config);
+        this.auth = getAuth(app);
+        this.db = getFirestore(app);
     }
     loginUser = async (email, password) => {
         try {
             const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-            this.user = userCredential.user;
+            return userCredential.user
         } catch (e) { throw e }
     }
     logoutUser = async () => {
@@ -223,6 +216,15 @@ class FirestoreDB {
         try {
             const docRef = await addDoc(collection(this.db, collectionName), data);
             return docRef.id;
+        } catch (e) { throw e }
+    }
+    readDocument = async (collectionName, documentId) => {
+        try {
+            const docSnap = await getDoc(doc(this.db, collectionName, documentId));
+            if (docSnap.exists()) {
+                return docSnap.data();
+            }
+            throw new Error("Doc not found")
         } catch (e) { throw e }
     }
     readDocuments = async (collectionName) => {
@@ -257,12 +259,47 @@ const db = new FirestoreDB({
 })
 
 class Talk {
-    constructor () {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {throw new Error("Speech recognition not supported")}
-        this.recognition = new SpeechRecognition();
+    constructor() {
+        this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        this.synth = window.speechSynthesis
+        if (!this.SpeechRecognition || !this.synth) { throw new Error("Voice assistance not available") }
+        const recognition = new SpeechRecognition();
+        recognition.onresult = e => { this.onRecResult && this.onRecResult(e.results[0][0]) }
+        recognition.onnomatch = e => { this.onRecNoMatch && this.onRecNoMatch(e) }
+        recognition.onerror = e => { this.onErr && this.onErr(e.error) }
+        recognition.onspeechend = () => { recognition.stop() }
+        this.recognition = recognition
+        this.synth.onvoiceschanged = this.loadVoices
+        this.loadVoices()
+    }
+    async localLang(lang = "en-US", cb) {
+        const stat = await this.SpeechRecognition.available({ langs: [lang], processLocally: true })
+        if (stat === "unavailable") { cb(`${lang} is not available to download`) }
+        else if (result === "available") { this.recognition.start() }
+        else {
+            const dlStat = await this.SpeechRecognition.install({ langs: [lang], processLocally: true })
+            if (dlStat) { cb(`${lang} language pack downloaded. Start recognition again.`) }
+            else { cb(`${lang} language pack failed to download. Try again later.`) }
+        }
+    }
+    loadVoices() { this.voices = this.synth.getVoices() }
+    speak(txt) {
+        const utter = new SpeechSynthesisUtterance(txt);
+        if (this.voice) {
+            for (const voice of this.voices) {
+                if (voice.name === this.voice) {
+                    utter.voice = voice;
+                }
+            }
+        }
+        if (this.pitch) {utter.pitch = this.pitch }
+        if (this.rate) {utter.rate = this.rate }
+        if (this.onPause) { utter.onpause}
+        if (this.onEnd) { utter.onend}
+        this.synth.speak(utter)
     }
 }
+const tk = new Talk()
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"

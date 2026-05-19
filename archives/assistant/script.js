@@ -3,29 +3,8 @@
 recognition.lang = "en-US";
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
-
-recognition.start();
-
-recognition.onresult = (event) => {
-  const color = event.results[0][0].transcript;
-  diagnostic.textContent = `Result received: ${color}.`;
-  bg.style.backgroundColor = color;
-  console.log(`Confidence: ${event.results[0][0].confidence}`);
-};
-
-recognition.onspeechend = () => {
-  recognition.stop();
-};
-
-recognition.onnomatch = (event) => {
-  diagnostic.textContent = "I didn't recognize that color.";
-};
-
-recognition.onerror = (event) => {
-  diagnostic.textContent = `Error occurred in recognition: ${event.error}`;
-};
-
 recognition.processLocally = true;
+recognition.start();
 
 startBtn.addEventListener("click", () => {
   // check availability of target language
