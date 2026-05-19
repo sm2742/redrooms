@@ -283,9 +283,6 @@ class Talk {
     }
     loadVoices() { this.voices = this.synth?.getVoices() }
     speak(txt) {
-        while (!this.voices || this.voices.length === 0) {
-            this.loadVoices()
-        }
         const utter = new SpeechSynthesisUtterance(txt);
         if (this.voice) {
             for (const voice of this.voices) {
