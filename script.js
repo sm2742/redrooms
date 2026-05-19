@@ -300,11 +300,13 @@ class Talk {
     }
 }
 const tk = new Talk()
-console.log(tk.voices);
-
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    setInterval(nf.notify("hello", null, 2000), 2000)
+    setInterval(()=>{
+        nf.notify("hello", null, 2000)
+console.log(tk.voices);
+
+    }, 2000)
 }
 init()
