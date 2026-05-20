@@ -326,7 +326,13 @@ const db = new FirestoreDB({
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
     ELEMENTS.loginBtn.addEventListener("click", async e=>{
-        console.log(db.auth);
+        if (db.auth.currentUser?.email) {
+            await db.logoutUser()
+            console.log(db.auth);
+        } else {
+            const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
+           nf.notify(`logged in as ${me.email}`, null, 3000)
+        }
     })
 }
 init()
