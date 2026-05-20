@@ -34,13 +34,17 @@ class Crypt {
         this.pass = pass
         const regex = new RegExp(`[${this.pass}]`, 'g');
         this.str = Crypt.baseStr.replace(regex, '') + this.pass
+        console.log(this.str)
     }
     encryptText(txt) {
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
         const pl = this.pass.length
         const sl = this.str.length
         let x = ""
-        for (let i = 0; i < txt.length; i++) x += this.str[(this.str.indexOf(txt[i]) + pl) % sl]
+        for (let i = 0; i < txt.length; i++){
+            console.log((this.str.indexOf(txt[i]) + pl) % sl, sl)
+             x += this.str[(this.str.indexOf(txt[i]) + pl) % sl]
+            }
         return x
     }
     decryptText(txt) {
