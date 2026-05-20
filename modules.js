@@ -216,11 +216,13 @@ export class FirestoreDB {
     readDocuments = async (collectionName) => {
         try {
             const querySnapshot = await getDocs(query(collection(this.db, collectionName), where("uid", "==", this.auth.currentUser.uid)));
-            const docsList = [];
-            querySnapshot.forEach((doc) => {
-                docsList.push({ id: doc.id, ...doc.data() });
-            });
-            return docsList;
+            if (querySnapshot.empty) {
+                return [];
+            }
+            return querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
         } catch (e) { throw e }
     }
     updateDocument = async (collectionName, documentId, updatedData) => {
