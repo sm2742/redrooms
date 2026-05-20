@@ -1,7 +1,7 @@
 "use strict"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
-import { getFirestore, collection, query, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
+import { getFirestore, collection, query, where, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
 
 class Notify {
     constructor(notificationSpan, audioFile) {
