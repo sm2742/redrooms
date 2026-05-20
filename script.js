@@ -323,16 +323,25 @@ const db = new FirestoreDB({
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
 
+ELEMENTS.loginBtn.addEventListener("click", async e => {
+    if (db.auth.currentUser) {
+        await db.logoutUser()
+        nf.notify(`logged out`, null, 3000)
+        e.target.innerText = "Login"
+    } else {
+        const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
+        nf.notify(`logged in as ${me.email}`, null, 3000)
+        e.target.innerText = "Logout"
+    }
+    ELEMENTS.email.classList.toggle("d-none")
+    ELEMENTS.password.classList.toggle("d-none")
+})
+
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    ELEMENTS.loginBtn.addEventListener("click", async e=>{
-        if (db.auth.currentUser?.email) {
-            await db.logoutUser()
-            console.log(db.auth);
-        } else {
-            const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
-           nf.notify(`logged in as ${me.email}`, null, 3000)
-        }
-    })
+    if (db.auth.currentUser) {
+        ELEMENTS.email.classList.toggle("d-none")
+        ELEMENTS.password.classList.toggle("d-none")
+    }
 }
 init()
