@@ -382,7 +382,7 @@ ELEMENTS.loginBtn.addEventListener("click", async e => {
         nf.notify(`logged in as ${me.email}`, null, 3000)
     }
 })
-tk.onRecResult = x => {console.log(x)}
+tk.onRecResult = x => {tk.speak(x.transcript)}
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
