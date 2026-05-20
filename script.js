@@ -98,8 +98,6 @@ class Crypt {
 }
 
 class Peering {
-    get callpeer() { return this.call?.peer }
-    get connpeer() { return this.conn?.peer }
     reset() {
         this.peer?.destroy()
         this.myid = null
@@ -157,10 +155,10 @@ class Peering {
         // peer.disconnect()
     }
     _handleconn(conn) {
-        conn.on("data", data => { this.onConnData && this.onConnData(data) });
+        conn.on("data", data => { this.onConnData && this.onConnData(conn.peer, data) });
         conn.on("open", () => {
             this.conn = conn
-            this.onConnOpen && this.onConnOpen()
+            this.onConnOpen && this.onConnOpen(conn.peer)
         });
         conn.on("close", () => {
             this.conn = null
@@ -171,7 +169,7 @@ class Peering {
         // conn.close()
     }
     _handlecall(call) {
-        call.on("stream", stream => { this.onCallStream && this.onCallStream(stream) })
+        call.on("stream", stream => { this.onCallStream && this.onCallStream(call.peer, stream) })
         call.on("open", () => {
             console.log("test call open");
         });
@@ -282,6 +280,11 @@ class Talk {
     }
 }
 
+class MediaFile {
+    constructor (){
+    }
+}
+
 const el = x => document.getElementById(x)
 const ELEMENTS = {
     notificationSpan: el("notificationSpan"),
@@ -293,7 +296,7 @@ const ELEMENTS = {
     videoCheck: el("videoCheck"),
     screenCheck: el("screenCheck"),
     faceCamCheck: el("faceCamCheck"),
-    autoSaveCheck: el("autoSaveCheck"),
+    autoSaveDBCheck: el("autoSaveDBCheck"),
     deviceList: el("deviceList"),
     player: el("player"),
     recordBtn: el("recordBtn"),
@@ -313,7 +316,7 @@ const ELEMENTS = {
     files: el("files"),
 }
 const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
-const cr = new Crypt()
+const cr = new Crypt(window.prompt("Enter your encryption key"))
 const pr = new Peering()
 const tk = new Talk()
 const db = new FirestoreDB({
@@ -323,6 +326,42 @@ const db = new FirestoreDB({
     storageBucket: "webstatic-c507c.firebasestorage.app",
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
+})
+pr.onPeerOpen = id => { ELEMENTS.myID.innerText = id }
+pr.onErr = err => { nf.notify(err.message || err, null, 3000) }
+pr.onConnData = (id, data) = {console.log(id, "=>", data)}
+pr.onCallStream = (id, stream) => {
+    ELEMENTS.othPlayer.srcObject = stream
+    ELEMENTS.callPeer.innerText = id
+}
+pr.onInCall = id => {
+    if (window.confirm(`${id} is calling`)) {
+        pr.answerCall(new MediaStream())
+    }
+}
+pr.onConnOpen = id => {
+    ELEMENTS.connPeer.innerText = id
+    ELEMENTS.sendBtn.disabled = false
+}
+ELEMENTS.connectBtn.addEventListener("click", e => {
+    pr.connectChat(ELEMENTS.remoteID.value)
+})
+ELEMENTS.sendBtn.addEventListener("click", e => {
+    pr.send(ELEMENTS.textInput.value)
+    ELEMENTS.textInput.value = ""
+    const fl = ELEMENTS.fileInput.files[0]
+    const cp = ELEMENTS.autoSaveDBCheck.checked
+    cr.encryptFile(fl, cp, txt=>{
+        cr.decryptFile(txt, cp, url=>{
+            const a = document.createElement("a")
+            a.href = url
+            a.download = fl.name
+            a.click()
+        })
+    })
+})
+ELEMENTS.callBtn.addEventListener("click", e => {
+    pr.makeCall(ELEMENTS.remoteID.value, new MediaStream())
 })
 db.onAuthChanged(async user => {
     if (user) {
@@ -346,8 +385,11 @@ ELEMENTS.loginBtn.addEventListener("click", async e => {
         nf.notify(`logged in as ${me.email}`, null, 3000)
     }
 })
+tk.onRecResult = x => {console.log(x)}
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
+    pr.init(window.prompt("Enter your peer ID\nLeave empty to get a random ID"))
+    tk.recognition.start()
 }
 init()
