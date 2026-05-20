@@ -52,6 +52,8 @@ class Crypt {
         return x
     }
     decryptText(txt) {
+        console.log(txt);
+        
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
         const pl = this.pass.length
         const sl = this.str.length
