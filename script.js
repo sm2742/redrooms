@@ -341,7 +341,7 @@ pr.onInCall = id => {
     }
 }
 pr.onConnOpen = id => {
-    ELEMENTS.connPeer.innerText = id
+    ELEMENTS.chatPeer.innerText = id
     ELEMENTS.sendBtn.disabled = false
 }
 ELEMENTS.connectBtn.addEventListener("click", e => {
