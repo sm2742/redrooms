@@ -33,35 +33,22 @@ export class Crypt {
         if (pass.length <= 2 || pass.length >= 91) { throw new Error("Passkey must be 3 to 90 chars long") }
         this.pass = pass
         const regex = new RegExp(`[${this.pass}]`, 'g');
-        this.str = Crypt.baseStr.replace(regex, '') + this.pass
+        this.str1 = Crypt.baseStr.replace(regex, '') + this.pass
+        const pl = this.pass.length
+        const sl = this.str1.length
+        this.str2 = ""
+        for (let i = 0; i < this.str1.length; i++) this.str2 += this.str1[(i + pl) % sl]
     }
     encryptText(txt) {
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
-        const pl = this.pass.length
-        const sl = this.str.length
         let enc = ""
-        for (let i = 0; i < txt.length; i++){
-            let j = (this.str.indexOf(txt[i]) + pl) % sl
-            if (j>=sl || j<0) {
-                console.log(j, sl)
-            }
-             enc += this.str[j]
-            }
+        for (let i = 0; i < txt.length; i++) enc += this.str2[this.str1.indexOf(txt[i])]
         return enc
     }
     decryptText(txt) {
         if (!txt || typeof txt !== "string") { throw new Error("Unsupported Data Type") }
-        const pl = this.pass.length
-        const sl = this.str.length
         let dec = ""
-        for (let i = 0; i < txt.length; i++) {
-            let j = (this.str.indexOf(txt[i]) - pl) % sl
-            if (j>=sl || j<0) {
-                
-                console.log(j, sl)
-            }
-             dec += this.str[j]
-            }
+        for (let i = 0; i < txt.length; i++) dec += this.str1[this.str2.indexOf(txt[i])]
         return dec
     }
     async compressFile(fileOrBlob) {

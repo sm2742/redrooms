@@ -85,8 +85,8 @@ db.onAuthChanged(async user => {
         ELEMENTS.loginBtn.innerText = "Logout"
         ELEMENTS.email.classList.add("d-none")
         ELEMENTS.password.classList.add("d-none")
-        // const files = await db.readDocuments("files")
-        // console.log(files);
+        const files = await db.readDocuments("files")
+        console.log(files);
     } else {
         ELEMENTS.loginBtn.innerText = "Login"
         ELEMENTS.email.classList.remove("d-none")
