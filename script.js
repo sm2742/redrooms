@@ -329,7 +329,7 @@ const db = new FirestoreDB({
 })
 pr.onPeerOpen = id => { ELEMENTS.myID.innerText = id }
 pr.onErr = err => { nf.notify(err.message || err, null, 3000) }
-pr.onConnData = (id, data) = {console.log(id, "=>", data)}
+pr.onConnData = (id, data) => {console.log(id, "=>", data)}
 pr.onCallStream = (id, stream) => {
     ELEMENTS.othPlayer.srcObject = stream
     ELEMENTS.callPeer.innerText = id
