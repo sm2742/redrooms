@@ -55,7 +55,13 @@ class Crypt {
         const pl = this.pass.length
         const sl = this.str.length
         let x = ""
-        for (let i = 0; i < txt.length; i++) x += this.str[(this.str.indexOf(txt[i]) - pl) % sl]
+        for (let i = 0; i < txt.length; i++) {
+            if ((this.str.indexOf(txt[i]) - pl) % sl>=sl) {
+                
+                console.log((this.str.indexOf(txt[i]) - pl) % sl, sl)
+            }
+             x += this.str[(this.str.indexOf(txt[i]) - pl) % sl]
+            }
         return x
     }
     async compressFile(fileOrBlob) {
