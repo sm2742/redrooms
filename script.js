@@ -340,8 +340,9 @@ ELEMENTS.loginBtn.addEventListener("click", async e => {
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
     if (db.auth.currentUser) {
-        ELEMENTS.email.classList.toggle("d-none")
-        ELEMENTS.password.classList.toggle("d-none")
+        ELEMENTS.email.classList.add("d-none")
+        ELEMENTS.password.classList.add("d-none")
+        ELEMENTS.loginBtn.innerText = "Logout"
     }
 }
 init()
