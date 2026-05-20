@@ -1,6 +1,6 @@
 "use strict"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
 import { getFirestore, collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
 
 class Notify {
@@ -191,6 +191,7 @@ class FirestoreDB {
         this.auth = getAuth(app);
         this.db = getFirestore(app);
     }
+    onAuthChanged(cb) { onAuthStateChanged(this.auth, cb) }
     loginUser = async (email, password) => {
         try {
             const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
@@ -322,27 +323,29 @@ const db = new FirestoreDB({
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
+db.onAuthChanged(user => {
+    if (user) {
+        ELEMENTS.loginBtn.innerText = "Logout"
+        ELEMENTS.email.classList.add("d-none")
+        ELEMENTS.password.classList.add("d-none")
+    } else {
+        ELEMENTS.loginBtn.innerText = "Login"
+        ELEMENTS.email.classList.remove("d-none")
+        ELEMENTS.password.classList.remove("d-none")
+    }
+})
 
 ELEMENTS.loginBtn.addEventListener("click", async e => {
     if (db.auth.currentUser) {
         await db.logoutUser()
         nf.notify(`logged out`, null, 3000)
-        e.target.innerText = "Login"
     } else {
         const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
         nf.notify(`logged in as ${me.email}`, null, 3000)
-        e.target.innerText = "Logout"
     }
-    ELEMENTS.email.classList.toggle("d-none")
-    ELEMENTS.password.classList.toggle("d-none")
 })
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    if (db.auth.currentUser) {
-        ELEMENTS.email.classList.add("d-none")
-        ELEMENTS.password.classList.add("d-none")
-        ELEMENTS.loginBtn.innerText = "Logout"
-    }
 }
 init()
