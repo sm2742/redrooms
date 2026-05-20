@@ -310,6 +310,7 @@ const ELEMENTS = {
     textInput: el("textInput"),
     fileInput: el("fileInput"),
     sendBtn: el("sendBtn"),
+    files: el("files"),
 }
 const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
 const cr = new Crypt()
@@ -323,25 +324,26 @@ const db = new FirestoreDB({
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
-db.onAuthChanged(user => {
+db.onAuthChanged(async user => {
     if (user) {
         ELEMENTS.loginBtn.innerText = "Logout"
         ELEMENTS.email.classList.add("d-none")
         ELEMENTS.password.classList.add("d-none")
+        const files = await db.readDocuments("files")
+        console.log(files);
     } else {
         ELEMENTS.loginBtn.innerText = "Login"
         ELEMENTS.email.classList.remove("d-none")
         ELEMENTS.password.classList.remove("d-none")
     }
 })
-
 ELEMENTS.loginBtn.addEventListener("click", async e => {
     if (db.auth.currentUser) {
         await db.logoutUser()
-        nf.notify(`logged out`, null, 3000)
+        nf.notify(`logged out`, null, null)
     } else {
         const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
-        nf.notify(`logged in as ${me.email}`, null, 3000)
+        nf.notify(`logged in as ${me.email}`, null, null)
     }
 })
 
