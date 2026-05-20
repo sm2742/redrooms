@@ -324,7 +324,11 @@ const db = new FirestoreDB({
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
-pr.onPeerOpen = id => { ELEMENTS.myID.innerText = id }
+pr.onPeerOpen = id => { 
+    ELEMENTS.myID.innerText = id
+    ELEMENTS.callBtn.disabled = false
+    ELEMENTS.connectBtn.disabled = false
+ }
 pr.onErr = err => { nf.notify(err.message || err, null, 3000) }
 pr.onConnData = (id, data) => {console.log(id, "=>", data)}
 pr.onCallStream = (id, stream) => {
@@ -339,8 +343,6 @@ pr.onInCall = id => {
 pr.onConnOpen = id => {
     ELEMENTS.connPeer.innerText = id
     ELEMENTS.sendBtn.disabled = false
-    ELEMENTS.callBtn.disabled = false
-    ELEMENTS.connectBtn.disabled = false
 }
 ELEMENTS.connectBtn.addEventListener("click", e => {
     pr.connectChat(ELEMENTS.remoteID.value)
