@@ -28,9 +28,6 @@ class Notify {
 
 class Crypt {
     static baseStr = "CDE\\yzABFGvwx~!@#$%^&*()_+-67890 `:;HIJKL=|mnopqPQRSTUVWX}{[]\"ghijklYZ12345MNOdefabcrstu'?><,./"
-    constructor(pass = "default") {
-        this.updatePass(pass)
-    }
     updatePass(pass) {
         if (!pass || typeof pass !== "string") { throw new Error("Enter a valid passkey") }
         if (pass.length <= 2 || pass.length >= 91) { throw new Error("Passkey must be 3 to 90 chars long") }
@@ -316,7 +313,7 @@ const ELEMENTS = {
     files: el("files"),
 }
 const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
-const cr = new Crypt(window.prompt("Enter your encryption key"))
+const cr = new Crypt()
 const pr = new Peering()
 const tk = new Talk()
 const db = new FirestoreDB({
@@ -368,8 +365,8 @@ db.onAuthChanged(async user => {
         ELEMENTS.loginBtn.innerText = "Logout"
         ELEMENTS.email.classList.add("d-none")
         ELEMENTS.password.classList.add("d-none")
-        const files = await db.readDocuments("files")
-        console.log(files);
+        // const files = await db.readDocuments("files")
+        // console.log(files);
     } else {
         ELEMENTS.loginBtn.innerText = "Login"
         ELEMENTS.email.classList.remove("d-none")
@@ -390,6 +387,7 @@ tk.onRecResult = x => {console.log(x)}
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
     pr.init(window.prompt("Enter your peer ID\nLeave empty to get a random ID"))
+    cr.updatePass(window.prompt("Enter your encryption key", "default") || "default")
     tk.recognition.start()
 }
 init()
