@@ -42,7 +42,10 @@ class Crypt {
         const sl = this.str.length
         let x = ""
         for (let i = 0; i < txt.length; i++){
-            console.log((this.str.indexOf(txt[i]) + pl) % sl, sl)
+            if ((this.str.indexOf(txt[i]) + pl) % sl>=sl) {
+                
+                console.log((this.str.indexOf(txt[i]) + pl) % sl, sl)
+            }
              x += this.str[(this.str.indexOf(txt[i]) + pl) % sl]
             }
         return x
