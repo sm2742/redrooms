@@ -339,6 +339,8 @@ pr.onInCall = id => {
 pr.onConnOpen = id => {
     ELEMENTS.connPeer.innerText = id
     ELEMENTS.sendBtn.disabled = false
+    ELEMENTS.callBtn.disabled = false
+    ELEMENTS.connectBtn.disabled = false
 }
 ELEMENTS.connectBtn.addEventListener("click", e => {
     pr.connectChat(ELEMENTS.remoteID.value)
