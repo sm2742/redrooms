@@ -340,10 +340,10 @@ db.onAuthChanged(async user => {
 ELEMENTS.loginBtn.addEventListener("click", async e => {
     if (db.auth.currentUser) {
         await db.logoutUser()
-        nf.notify(`logged out`, null, null)
+        nf.notify(`logged out`, null, 3000)
     } else {
         const me = await db.loginUser(ELEMENTS.email.value, ELEMENTS.password.value)
-        nf.notify(`logged in as ${me.email}`, null, null)
+        nf.notify(`logged in as ${me.email}`, null, 3000)
     }
 })
 
