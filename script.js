@@ -283,9 +283,11 @@ class Talk {
 
 const el = x => document.getElementById(x)
 const ELEMENTS = {
-    loginBtn: el("loginBtn"),
     notificationSpan: el("notificationSpan"),
     logo: document.getElementsByClassName("logo"),
+    email: el("email"),
+    password: el("password"),
+    loginBtn: el("loginBtn"),
     audioCheck: el("audioCheck"),
     videoCheck: el("videoCheck"),
     screenCheck: el("screenCheck"),
@@ -323,5 +325,9 @@ const db = new FirestoreDB({
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
+    ELEMENTS.loginBtn.addEventListener("click", async ()=>{
+        const me = await db.loginUser(ELEMENTS.email.ariaValueMax, ELEMENTS.password.value)
+        console.log(me);
+    })
 }
 init()
