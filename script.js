@@ -1,4 +1,4 @@
-import * from "/modules.js"
+import {Notify, Crypt, Peering, Talk, FirestoreDB} from "/modules.js";
 
 const el = x => document.getElementById(x)
 const ELEMENTS = {
