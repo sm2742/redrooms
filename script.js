@@ -1,4 +1,4 @@
-import {Notify, Crypt, Peering, Talk, FirestoreDB} from "/modules.js";
+import { Notify, Crypt, Peering, Talk, FirestoreDB, MediaFile } from "/modules.js";
 
 const el = x => document.getElementById(x)
 const ELEMENTS = {
@@ -34,6 +34,7 @@ const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
 const cr = new Crypt()
 const pr = new Peering()
 const tk = new Talk()
+const md = new MediaFile()
 const db = new FirestoreDB({
     apiKey: "AIzaSyDS7hzEKNArZOLbbiL2QcM2vxDVeSIo3mk",
     authDomain: "webstatic-c507c.firebaseapp.com",
@@ -42,20 +43,20 @@ const db = new FirestoreDB({
     messagingSenderId: "874107128529",
     appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
 })
-pr.onPeerOpen = id => { 
+pr.onPeerOpen = id => {
     ELEMENTS.myID.innerText = id
     ELEMENTS.callBtn.disabled = false
     ELEMENTS.connectBtn.disabled = false
- }
+}
 pr.onErr = err => { nf.notify(err.message || err, null, 3000) }
-pr.onConnData = (id, data) => {console.log(id, "=>", data)}
+pr.onConnData = (id, data) => { console.log(id, "=>", data) }
 pr.onCallStream = (id, stream) => {
     ELEMENTS.othPlayer.srcObject = stream
     ELEMENTS.callPeer.innerText = id
 }
 pr.onInCall = id => {
     if (window.confirm(`${id} is calling`)) {
-        pr.answerCall(new MediaStream())
+        pr.answerCall(md.getUserMedia({ video: true, audio: true }))
     }
 }
 pr.onConnOpen = id => {
@@ -68,8 +69,8 @@ ELEMENTS.connectBtn.addEventListener("click", e => {
 ELEMENTS.fileInput.addEventListener("change", e => {
     const fl = ELEMENTS.fileInput.files[0]
     const cp = ELEMENTS.autoSaveDBCheck.checked
-    cr.encryptFile(fl, cp, txt=>{
-        cr.decryptFile(txt, cp, url=>{
+    cr.encryptFile(fl, cp, txt => {
+        cr.decryptFile(txt, cp, url => {
             const a = document.createElement("a")
             a.href = url
             a.download = fl.name
@@ -78,15 +79,13 @@ ELEMENTS.fileInput.addEventListener("change", e => {
     })
 })
 ELEMENTS.callBtn.addEventListener("click", e => {
-    pr.makeCall(ELEMENTS.remoteID.value, new MediaStream())
+    pr.makeCall(ELEMENTS.remoteID.value, md.getUserMedia({ video: true, audio: true }))
 })
 db.onAuthChanged(async user => {
     if (user) {
         ELEMENTS.loginBtn.innerText = "Logout"
         ELEMENTS.email.classList.add("d-none")
         ELEMENTS.password.classList.add("d-none")
-        // const files = await db.readDocuments("files")
-        // console.log(files);
     } else {
         ELEMENTS.loginBtn.innerText = "Login"
         ELEMENTS.email.classList.remove("d-none")
@@ -102,7 +101,7 @@ ELEMENTS.loginBtn.addEventListener("click", async e => {
         nf.notify(`logged in as ${me.email}`, null, 3000)
     }
 })
-tk.onRecResult = x => {tk.speak(x.transcript)}
+tk.onRecResult = x => { tk.speak(x.transcript) }
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"

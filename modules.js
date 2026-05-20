@@ -25,7 +25,6 @@ export class Notify {
         }
     }
 }
-
 export class Crypt {
     static baseStr = "CDE\\yzABFGvwx~!@#$%^&*()_+-67890 `:;HIJKL=|mnopqPQRSTUVWX}{[]\"ghijklYZ12345MNOdefabcrstu'?><,./"
     updatePass(pass) {
@@ -93,7 +92,6 @@ export class Crypt {
         } catch (e) { throw e }
     }
 }
-
 export class Peering {
     reset() {
         this.peer?.destroy()
@@ -179,7 +177,6 @@ export class Peering {
         // call.close()
     }
 }
-
 export class FirestoreDB {
     constructor(config) {
         const app = initializeApp(config);
@@ -237,7 +234,6 @@ export class FirestoreDB {
         } catch (e) { throw e }
     }
 }
-
 export class Talk {
     constructor() {
         this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -278,8 +274,28 @@ export class Talk {
         this.synth.speak(utter)
     }
 }
-
 export class MediaFile {
-    constructor (){
+    constructor() {
+        this.mediaDevices = navigator.mediaDevices
+        if (!this.mediaDevices) { throw new Error("Media recording not supported") }
+    }
+    async getUserMedia(constraints) {
+        const stream = await this.mediaDevices.getUserMedia(constraints)
+        return stream
+    }
+    async getDisplayMedia(constraints) {
+        const stream = await this.mediaDevices.getDisplayMedia(constraints)
+        return stream
+    }
+    recordStream(stream) {
+        let chunks = []
+        let mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => chunks.push(e.data)
+        mediaRecorder.onstop = e => {
+            stream.getTracks().forEach(track => track.stop());
+            const blob = new Blob(chunks);
+            this.onRecStop && this.onRecStop(URL.createObjectURL(blob))
+        }
+        mediaRecorder.start();
     }
 }
