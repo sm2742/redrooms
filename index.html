@@ -24,7 +24,57 @@
     <span id="notificationSpan" class="flex flex-column sec-bg d-none" style="max-height: 40vh;"></span>
     <!-- body -->
     <div class="prim-bg" style="padding: 4vw;">
-
+        <section id="record">
+            <div class="flex">
+                <!-- needs nudging -->
+                <label for="screenCheck" class="pointer">Screen: </label>
+                <input type="checkbox" class="pointer ml-14" id="screenCheck">
+                <label for="audioCheck" class="pointer ml-14">Audio : </label>
+                <input type="checkbox" class="pointer ml-14" id="audioCheck">
+                <label for="videoCheck" class="pointer ml-14">Video: </label>
+                <input type="checkbox" class="pointer ml-14" id="videoCheck" checked>
+                <label for="faceCamCheck" class="pointer ml-14">Face Camera: </label>
+                <input type="checkbox" class="pointer ml-14" id="faceCamCheck">
+                <label for="autoSaveCheck" class="pointer ml-14">Auto Save: </label>
+                <input type="checkbox" class="pointer ml-14" id="autoSaveCheck">
+            </div>
+            <div class="flex mu-14">
+                <button class="btn sec-bg" id="recordBtn" disabled>Start Recording</button>
+                <button class="btn sec-bg ml-14" id="snapshot" disabled>Take Snapshot</button>
+            </div>
+            <div class="flex mu-14">
+                <video id="player" style="width: 500px; max-width: 85vw;" autoplay controls muted></video>
+            </div>
+            <div class="mu-14" id="deviceList">
+                Available Devices:
+            </div>
+        </section>
+        <section id="connect">
+            <div>
+                <div>My ID: <span id="myID">Connecting...</span></div>
+                <div class="mu-2">Connected on chat: <span id="chatPeer">Not Connected</span></div>
+                <div class="mu-2">Connected on call: <span id="callPeer">Not Connected</span></div>
+            </div>
+            <div class="flex mu-14">
+                <input type="text" id="remoteID" class="btn sec-bg mr-14" placeholder="Enter remote ID">
+                <div class="mu-2">
+                    <button class="btn sec-bg pointer" id="connectBtn" disabled>Connect</button>
+                    <button class="btn sec-bg pointer ml-14" id="callBtn" disabled>Call</button>
+                </div>
+            </div>
+            <div class="flex mu-14">
+                <video id="myPlayer" style="max-width: 45vw;" class="mr-14 mu-14" autoplay controls muted></video>
+                <video id="othPlayer" style="max-width: 45vw;" class="mr-14 mu-14" autoplay controls></video>
+            </div>
+            <div class="mu-14">
+                <div id="messages" style="height: 40vh; overflow-y: auto; scrollbar-width: none;"></div>
+                <div class="mu-2">
+                    <input type="file" id="fileInput" class="btn sec-bg mr-14 mu-2">
+                    <input type="text" id="textInput" class="btn sec-bg mr-14 mu-2" placeholder="Message">
+                    <button class="btn sec-bg pointer mu-2" id="sendBtn" disabled>Send</button>
+                </div>
+            </div>
+        </section>
     </div>
     <!-- footer -->
     <div class="sec-bg" id="footer">

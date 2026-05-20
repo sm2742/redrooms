@@ -3,13 +3,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/fireba
 import { getAuth, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js'
 import { getFirestore, collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js'
 
-const el = x => document.getElementById(x)
-const ELEMENTS = {
-    loginBtn: el("loginBtn") || null,
-    notificationSpan: el("notificationSpan"),
-    logo: document.getElementsByClassName("logo"),
-}
-
 class Notify {
     constructor(notificationSpan, audioFile) {
         this.sound = new Audio(audioFile)
@@ -32,7 +25,6 @@ class Notify {
         }
     }
 }
-const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
 
 class Crypt {
     static baseStr = "CDE\\yzABFGvwx~!@#$%^&*()_+-67890 `:;HIJKL=|mnopqPQRSTUVWX}{[]\"ghijklYZ12345MNOdefabcrstu'?><,./"
@@ -104,7 +96,6 @@ class Crypt {
         } catch (e) { throw e }
     }
 }
-const cr = new Crypt()
 
 class Peering {
     get callpeer() { return this.call?.peer }
@@ -193,7 +184,6 @@ class Peering {
         // call.close()
     }
 }
-const pr = new Peering()
 
 class FirestoreDB {
     constructor(config) {
@@ -249,14 +239,6 @@ class FirestoreDB {
         } catch (e) { throw e }
     }
 }
-const db = new FirestoreDB({
-    apiKey: "AIzaSyDS7hzEKNArZOLbbiL2QcM2vxDVeSIo3mk",
-    authDomain: "webstatic-c507c.firebaseapp.com",
-    projectId: "webstatic-c507c",
-    storageBucket: "webstatic-c507c.firebasestorage.app",
-    messagingSenderId: "874107128529",
-    appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
-})
 
 class Talk {
     constructor() {
@@ -298,10 +280,48 @@ class Talk {
         this.synth.speak(utter)
     }
 }
+
+const el = x => document.getElementById(x)
+const ELEMENTS = {
+    loginBtn: el("loginBtn"),
+    notificationSpan: el("notificationSpan"),
+    logo: document.getElementsByClassName("logo"),
+    audioCheck: el("audioCheck"),
+    videoCheck: el("videoCheck"),
+    screenCheck: el("screenCheck"),
+    faceCamCheck: el("faceCamCheck"),
+    autoSaveCheck: el("autoSaveCheck"),
+    deviceList: el("deviceList"),
+    player: el("player"),
+    recordBtn: el("recordBtn"),
+    snapshot: el("snapshot"),
+    myID: el("myID"),
+    remoteID: el("remoteID"),
+    connectBtn: el("connectBtn"),
+    callBtn: el("callBtn"),
+    chatPeer: el("chatPeer"),
+    callPeer: el("callPeer"),
+    myPlayer: el("myPlayer"),
+    othPlayer: el("othPlayer"),
+    messages: el("messages"),
+    textInput: el("textInput"),
+    fileInput: el("fileInput"),
+    sendBtn: el("sendBtn"),
+}
+const nf = new Notify(ELEMENTS.notificationSpan, "/notify.mp3")
+const cr = new Crypt()
+const pr = new Peering()
 const tk = new Talk()
+const db = new FirestoreDB({
+    apiKey: "AIzaSyDS7hzEKNArZOLbbiL2QcM2vxDVeSIo3mk",
+    authDomain: "webstatic-c507c.firebaseapp.com",
+    projectId: "webstatic-c507c",
+    storageBucket: "webstatic-c507c.firebasestorage.app",
+    messagingSenderId: "874107128529",
+    appId: "1:874107128529:web:b08a75a87b311ebbdd93f0"
+})
 
 const init = () => {
     for (const x of ELEMENTS.logo) x.onclick = () => window.location.href = "/"
-    tk.speak("hello")
 }
 init()

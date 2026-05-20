@@ -1,16 +1,5 @@
 const DOMElements = {
-    myID: el("myID"),
-    remoteID: el("remoteID"),
-    connectBtn: el("connectBtn"),
-    callBtn: el("callBtn"),
-    chatPeer: el("chatPeer"),
-    callPeer: el("callPeer"),
-    myPlayer: el("myPlayer"),
-    othPlayer: el("othPlayer"),
-    messages: el("messages"),
-    textInput: el("textInput"),
-    fileInput: el("fileInput"),
-    sendBtn: el("sendBtn"),
+
 }
 const peer = new Peer(window.prompt("Enter your peer ID\nLeave empty to get a random ID"));
 
