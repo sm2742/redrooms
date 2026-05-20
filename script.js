@@ -351,9 +351,7 @@ pr.onConnOpen = id => {
 ELEMENTS.connectBtn.addEventListener("click", e => {
     pr.connectChat(ELEMENTS.remoteID.value)
 })
-ELEMENTS.sendBtn.addEventListener("click", e => {
-    pr.send(ELEMENTS.textInput.value)
-    ELEMENTS.textInput.value = ""
+ELEMENTS.fileInput.addEventListener("change", e => {
     const fl = ELEMENTS.fileInput.files[0]
     const cp = ELEMENTS.autoSaveDBCheck.checked
     cr.encryptFile(fl, cp, txt=>{
