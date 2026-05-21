@@ -144,10 +144,8 @@ export class Peering {
             this._handlecall(call)
             this.onInCall && this.onInCall(call.peer)
         });
-        // peer.listAllPeers(callback)
-        // peer.destroy()
-        // peer.reconnect()
-        // peer.disconnect()
+        // peer.listAllPeers(callback) peer.disconnect()
+        // peer.destroy() peer.reconnect()
     }
     _handleconn(conn) {
         conn.on("data", data => { this.onConnData && this.onConnData(conn.peer, data) });
